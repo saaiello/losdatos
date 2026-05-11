@@ -281,11 +281,12 @@ function updateHUD(zoneIndex) {
     'DISTRICT 2 — THE SCORE',
     'DISTRICT 3 — THE WEIGHT',
     'DISTRICT 4 — THE GAP',
-    'DISTRICT 5 — THE TABLE'
+    'DISTRICT 5 — THE TABLE',
+    'DISTRICT 6 - THE PLAYBOOK'
   ];
   document.getElementById('zone-label').textContent = zoneNames[zoneIndex];
 
-  for (let i = 0; i <= 4; i++) {
+  for (let i = 0; i <= 5; i++) {
     const row = document.getElementById('dr-' + i);
     if (!row) continue;
     row.classList.remove('unlocked', 'active');
@@ -405,6 +406,28 @@ function addPoints(points) {
   if (scoreDisplay) {
     scoreDisplay.textContent = String(score).padStart(6, '0');
   }
+}
+
+function advanceToPlaybook() {
+  district5Screen = 2;
+  currentZone = 6;
+  addPoints(100);
+  updateHUD(5);
+  document.getElementById('zone-label').textContent = 'DISTRICT 6 — THE PLAYBOOK';
+  document.getElementById('main-content').innerHTML = `
+    <div class="slide-in">
+      <div class="rules-header">// RULES OF ENGAGEMENT //</div>
+      ${buildRules(ZONES[6].rules)}
+      ${buildPrompt(ZONES[6].prompt)}
+    </div>`;
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.className   = 'nav-btn arrived';
+  nextBtn.textContent = 'MISSION COMPLETE >>';
+  nextBtn.onclick     = openFinishScreen;
+
+  document.getElementById('back-btn').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ── Build character card HTML ──
@@ -629,7 +652,17 @@ function renderZone(zoneIndex) {
 
   let html = '';
 
-  if (zoneIndex === 4) {
+  if (zoneIndex === 6) {
+      html = `
+        <div class="slide-in">
+          <div class="rules-header">// RULES OF ENGAGEMENT //</div>
+          ${buildRules(ZONES[6].rules)}
+          ${buildPrompt(ZONES[6].prompt)}
+        </div>`;
+
+    document.getElementById('main-content').innerHTML = html;
+
+  } else if (zoneIndex === 4) {
     html = `
       <div class="slide-in">
         <div class="content-grid">
@@ -736,8 +769,8 @@ function renderZone(zoneIndex) {
 
   if (zoneIndex === 5) {
     nextBtn.className   = 'nav-btn forward';
-    nextBtn.textContent = 'Next Level >>';
-    nextBtn.onclick     = advanceDistrict5Screen;
+    nextBtn.textContent = '>> THE PLAYBOOK';
+    nextBtn.onclick     = advanceToPlaybook;
   } else if (zoneIndex >= 6) {
     nextBtn.className   = 'nav-btn arrived';
     nextBtn.textContent = 'MISSION COMPLETE >>';
