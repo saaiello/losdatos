@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Los Datos — CFF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="game" role="main">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-score-block">
+        <span class="header-score-label">SCORE</span>
+        <span class="header-score-val" id="score-display">000000</span>
+      </div>
+      <h1 class="header-title" onclick="returnToStart()" style="cursor:pointer;" title="Return to start">LOS DATOS</h1>
+      <div class="header-meta">
+        <span id="zone-label">DISTRICT 0</span>
+        <span id="time-label">45 MIN</span>
+      </div>
+    </header>
+
+
+    <!-- Start Screen -->
+    <div class="start-screen" id="start-screen">
+      <div class="start-overlay"></div>
+      <div class="start-content">
+        <div class="start-badge">CHILDREN &amp; FAMILY FUTURES // 2026</div>
+        <div class="start-title">LOS DATOS</div>
+        <div class="start-tagline">In Los Datos, the algorithm always scores first.</div>
+          <div class="district-list">
+            <div class="district-list-label">// SELECT DISTRICT //</div>
+            <div class="district-row" id="dr-briefing" onclick="startGame()" style="cursor:pointer;">
+              <span class="district-num">BRIEFING</span>
+              <span class="district-name">Mission Briefing</span>
+              <span class="district-lock">AVAILABLE</span>
+            </div>
+            <div class="district-row" id="dr-0" onclick="jumpToDistrict(1)" style="cursor:pointer;">
+              <span class="district-num">DISTRICT 1</span>
+              <span class="district-name">The Call</span>
+              <span class="district-lock">LOCKED</span>
+            </div>
+            <div class="district-row" id="dr-1" onclick="jumpToDistrict(2)" style="cursor:pointer;">
+              <span class="district-num">DISTRICT 2</span>
+              <span class="district-name">The Score</span>
+              <span class="district-lock">LOCKED</span>
+            </div>
+            <div class="district-row" id="dr-2" onclick="jumpToDistrict(3)" style="cursor:pointer;">
+              <span class="district-num">DISTRICT 3</span>
+              <span class="district-name">The Weight</span>
+              <span class="district-lock">LOCKED</span>
+            </div>
+            <div class="district-row" id="dr-3" onclick="jumpToDistrict(4)" style="cursor:pointer;">
+              <span class="district-num">DISTRICT 4</span>
+              <span class="district-name">The Gap</span>
+              <span class="district-lock">LOCKED</span>
+            </div>
+            <div class="district-row" id="dr-4" onclick="jumpToDistrict(5)" style="cursor:pointer;">
+              <span class="district-num">DISTRICT 5</span>
+              <span class="district-name">The Table</span>
+              <span class="district-lock">LOCKED</span>
+            </div>
+            <div class="district-row" id="dr-complete" onclick="jumpToDistrict(6)" style="cursor:pointer;">
+              <span class="district-num">COMPLETE</span>
+              <span class="district-name">Mission Complete</span>
+              <span class="district-lock">LOCKED</span>
+            </div>
+          </div>
+        <button class="start-btn" id="start-btn" onclick="startGame()">>> PRESS START</button>
+      </div>
+    </div>
+
+    <!-- Character Unlock Banner -->
+    <div class="unlock-banner" id="unlock-banner">
+      ★ NEW CHARACTER UNLOCKED ★
+    </div>
+
+    <!-- Dynamic content injected by game.js -->
+    <div id="main-content" aria-live="polite"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-deck" id="nav-deck" aria-label="Game navigation">
+      <button class="nav-btn back" id="back-btn" onclick="goBack()" aria-label="Go back to previous district" style="display:none;"><< Back</button>
+      <div class="dice-result" id="dice-result" aria-live="polite"></div>
+      <button class="nav-btn forward" id="next-btn" onclick="advanceDistrict()" aria-label="Advance to next district">Next Level >></button>
+    </nav>
+
+  </div>
+
+<!-- Finish Screen -->
+<div class="finish-overlay" id="finish-overlay">
+  <div class="finish-box">
+    <div class="finish-title">MISSION COMPLETE</div>
+    <div class="finish-congrats">Well played.</div>
+    <div class="finish-score-block">
+      <div class="finish-score-label">FINAL SCORE</div>
+      <div class="finish-score-val" id="finish-score-val">000000</div>
+      <div class="finish-score-max">out of 000825</div>
+    </div>
+    <div class="finish-message">
+      "Thank you for playing!"
+    </div>
+    <button class="finish-btn" onclick="closeFinishScreen()">
+      >> PLAY AGAIN
+    </button>
+  </div>
+</div>
+
+  <!-- Character Modal -->
+<div class="char-modal-overlay" id="char-modal" role="dialog" aria-modal="true" onclick="handleCharModalClick(event)">
+  <div class="char-modal-box" id="char-modal-box">
+    <button class="char-modal-close" id="char-modal-close" onclick="closeCharModal()" aria-label="Close">✕</button>
+    <div id="char-modal-content"></div>
+  </div>
+</div>
+
+  <!-- Rule Modal Overlay -->
+  <div class="modal-overlay" id="rule-modal" role="dialog" aria-modal="true" aria-labelledby="modal-rule-title" onclick="handleModalClick(event)">
+    <div class="modal-box">
+      <button class="modal-close" id="modal-close" onclick="closeRuleModal()" aria-label="Close">✕</button>
+      <div class="modal-scroll" id="modal-content">
+        <!-- Populated by openRuleModal() -->
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    function handleModalClick(e) {
+      if (e.target === document.getElementById('rule-modal')) closeRuleModal();
+    }
+    function handleCharModalClick(e) {
+  if (e.target === document.getElementById('char-modal')) closeCharModal();
+    }
+  </script>
+</body>
+</html>
