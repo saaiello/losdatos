@@ -58,12 +58,12 @@
             </div>
             <div class="district-row" id="dr-3" onclick="jumpToDistrict(4)" style="cursor:pointer;">
               <span class="district-num">DISTRICT 4</span>
-              <span class="district-name">The Gap</span>
+              <span class="district-name">The Reality</span>
               <span class="district-lock">LOCKED</span>
             </div>
             <div class="district-row" id="dr-4" onclick="jumpToDistrict(5)" style="cursor:pointer;">
               <span class="district-num">DISTRICT 5</span>
-              <span class="district-name">The Table</span>
+              <span class="district-name">The Shift</span>
               <span class="district-lock">LOCKED</span>
             </div>
             <div class="district-row" id="dr-5" onclick="jumpToDistrict(6)" style="cursor:pointer;">
@@ -71,8 +71,13 @@
               <span class="district-name">The Playbook</span>
               <span class="district-lock">LOCKED</span>
             </div>
-            <div class="district-row" id="dr-complete" onclick="jumpToDistrict(6)" style="cursor:pointer;">
-              <span class="district-num">COMPLETE</span>
+            <div class="district-row" id="dr-intel" onclick="window.open('YOUR_URL_HERE', '_blank')" style="cursor:pointer;">
+              <span class="district-num">INTEL</span>
+              <span class="district-name">Resources</span>
+              <span class="district-lock">AVAILABLE</span>
+            </div>
+            <div class="district-row" id="dr-complete" onclick="jumpToDistrict(99)" style="cursor:pointer;">
+              <span class="district-num">END CREDITS</span>
               <span class="district-name">Mission Complete</span>
               <span class="district-lock">LOCKED</span>
             </div>
@@ -95,7 +100,6 @@
       <div class="dice-result" id="dice-result" aria-live="polite"></div>
       <button class="nav-btn forward" id="next-btn" onclick="advanceDistrict()" aria-label="Advance to next district">Next Level >></button>
     </nav>
-
   </div>
 
 <!-- Finish Screen -->

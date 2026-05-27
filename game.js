@@ -1,16 +1,38 @@
 /* ============================================================
    LOS DATOS — GAME LOGIC
+   Children & Family Futures | 2026
+   ============================================================
+
+   TABLE OF CONTENTS
+   1.  Game State
+   2.  Rule Data (RULE_DETAIL)
+   3.  Zone Data (ZONES)
+   4.  HUD & Navigation
+   5.  Game Flow Functions
+   6.  Zone Rendering
+   7.  Builder Functions
+   8.  Interaction Handlers
+   9.  Modal Functions
+   10. Init
    ============================================================ */
 
-// ── Game state ──
-let currentZone  = 0;
-let voteRevealed = false;
-let score        = 0;
-let gameStarted  = false;
+
+/* ============================================================
+   1. GAME STATE
+   ============================================================ */
+
+let currentZone       = 0;
+let voteRevealed      = false;
+let score             = 0;
+let gameStarted       = false;
 let onMissionBriefing = false;
 let district5Screen   = 1;
 
-// ── Full rule data for modal overlays ──
+
+/* ============================================================
+   2. RULE DATA
+   ============================================================ */
+
 const RULE_DETAIL = [
   {
     num: "Rule I",
@@ -61,7 +83,7 @@ const RULE_DETAIL = [
       "Are families informed when a predictive risk tool is being used in decisions about them?",
       "Do families have any mechanism to understand or contest a score?",
       "How does the agency ensure that SUD treatment engagement is read as a strength, not a risk factor?",
-      "Is there a mechanism for the screener to flag contextual information that the score can't capture — like an active home visiting program — before the decision is made?",
+      "Is there a mechanism for the screener to flag contextual information that the score can't capture — like an active home visiting program — before the decision is made?"
     ]
   },
   {
@@ -98,29 +120,28 @@ const RULE_DETAIL = [
   }
 ];
 
-// ── Zone data ──
+
+/* ============================================================
+   3. ZONE DATA
+   ============================================================ */
+
 const ZONES = [
-  { //ZONE ZERO
+  { // ZONE 0 — placeholder (mission briefing renders from showMissionBriefing)
     id: 0,
     name: "Los Datos",
     time: "5 min",
-    narration: `Welcome to Los Datos. Before we begin — when I say the word "AI," what comes to mind?
-
-    Most people picture ChatGPT, Gemini, a chatbot. That's generative AI — the kind that creates content, writes text, generates images. Think of it like a very sophisticated game of "finish this sentence," except it's played billions of times, across billions of documents, until the system gets very good at knowing what tends to come next. That's real, and we can talk about it another time.
-
-    What we're really here for today is something different. Something quieter. Something already inside child welfare systems across this country. It doesn't write anything. It doesn't talk. It assigns a number. And that number can change what happens to a family.`,
+    narration: null,
     character: null,
-    mentiLink: "https://www.menti.com/PLACEHOLDER",
+    mentiLink: null,
     prompt: null,
     vote: null,
     rules: null,
   },
-  { // ZONE ONE
+  { // ZONE 1 — The Call
     id: 1,
     name: "District 1 — The Call",
     time: "10 min",
-    narration: `A referral comes in. A neighbor called the hotline about the Washington family. She said the kids, ages 6 and 8, were knocking on her door saying they were hungry. Denise Washington, a Black mother in her 30s, wasn't home. The neighbor didn't know where she was, just that she leaves some evenings. The neighbor said she's seen different people coming and going from the apartment, and that she's pretty sure Denise had a prior drug problem, but she’s been clean for months. The kids looked clean and healthy.<br><br>
-    Maya picks up the call. She gathers the information, validates it, cross-checks it against the data warehouse. She sees Denise receives housing assistance and Medicaid. She sees prior CPS contact; the allegation was unsubstantiated. She also sees a flag that Denise is actively enrolled with a community support treatment program that is known to complete home visits. Once the referral is complete, she runs the score and within seconds, a number appears on her screen. The number is 17.`,
+    narration: `A neighbor called the hotline about the Washington family. She said the kids, ages 9 and 10, knocked on her door saying they were hungry and their mother, Denise Washington, wasn’t home. The neighbor doesn’t know where Denise is, just that she leaves some evenings, and she's seen different people coming and going from the apartment. She describes Denise as a Black mother in her 30s and is pretty sure she had a prior drug problem, but she’s been clean for months.`,
     character: {
       emoji: "👩🏽‍💼",
       name: "Maya",
@@ -128,10 +149,10 @@ const ZONES = [
       accent: "#4cc9f0",
       image: "assets/maya.png",
       stats: [
-      { label: "EXPERIENCE", val: "11 Years" },
-      { label: "CASELOAD", val: "80+ / Week" },
-    ],
-      bio: "Maya has worked in child welfare for 11 years. She screens more than 80 referrals a week. She's good at her job — but no one could be consistent across that volume with only their own judgment and a checklist. Maya is why predictive risk models exist. She is not the problem. She is the human condition.",
+        { label: "EXPERIENCE", val: "11 Years" },
+        { label: "CASELOAD",   val: "80+ / Week" },
+      ],
+      bio: "Maya has worked in child welfare for 11 years. She screens more than 80 referrals a week. She's good at her job, but no one could be consistent across that volume with only their own judgment and a checklist.",
       phrase: null,
     },
     charOrder: "first",
@@ -140,12 +161,12 @@ const ZONES = [
     vote: null,
     rules: null,
   },
-  {// ZONE TWO
+  { // ZONE 2 — The Score
     id: 2,
     name: "District 2 — The Score",
     time: "10 min",
-    narration: `The Allegheny Family Screening Tool was trained on data from 77,000 referrals. The algorithm looked at 800 data points such as: prior CPS referrals, behavioral health records, housing assistance, jail records and juvenile probation. That then becomes a score from 1 to 20.<br><br>
-    A score of 18–20, with a child under 16 in the home, is High-Risk Protocol — default screen in. A score of 1–12, with kids over 7: Low-Risk Protocol — default screen out. Maya still has discretion. Her supervisor still makes the call.<br><br>`,
+    narration: `The Allegheny Family Screening Tool was trained on data from 77,000 referrals. The algorithm looked at features such as prior CPS referrals, mental health records, housing assistance, etc. That then becomes a score from 1 to 20.<br><br>
+    So now the question is: where did that number come from? Whose information built it? And what did it leave out?`,
     character: {
       emoji: "🤖",
       name: "Al the Algorithm",
@@ -153,30 +174,31 @@ const ZONES = [
       accent: "#f8c400",
       image: "assets/al.png",
       stats: [
-      { label: "DATA POINTS", val: "800" },
-      { label: "SCALE", val: "1 to 20" },
-    ],
-      bio: "Al is not evil. Al is not even conscious. He is a statistical model trained on nearly 77,000 referrals from the past. He has 800 data points on Denise's household and gives Maya a number between 1 and 20. Al genuinely believes he is helping but he only knows what he's been shown. He gives Denise Washington a score of 17 out of 20.",
+        { label: "DATA POINTS", val: "800" },
+        { label: "SCALE",       val: "1 to 20" },
+      ],
+      bio: "Al is not evil. Al is not even conscious. He is a statistical model trained on data from the past. Al has 800 data points on Denise's household and gives Maya the number 17.",
       phrase: "\"I have 800 data points on this.\"",
     },
     charOrder: "before-vote",
     prompt: null,
     mentiLink: null,
     vote: {
-      question: "Maya sees the number. Denise's score is 17 — if you were Maya, what would you do?",
+      question: "If you were Maya and you saw the number 17. What would you do?",
       optionA: "Screen In",
       optionB: "Screen Out",
-      reveal: "Here's the thing about that vote — it doesn't matter which way you went. What matters is what was driving it. Were you following the score? Were you second-guessing it? Were you thinking about Denise — what you know about her, what you don't? The question isn't what Al says. The question is whether Al's score informs Maya's judgment — or replaces it.",
+      reveal: "It doesn't matter which way you went, what matters is what was driving it. Were you following the score? Were you second-guessing it? The question isn't what AI says. The question is whether its score informs Maya's judgment, or replaces it.",
     },
     rules: null,
   },
-  {// ZONE THREE
+  { // ZONE 3 — The Weight
     id: 3,
     name: "District 3 — The Weight",
     time: "12 min",
-    narration: `Think about what went into Denise's score. Prior CPS contact. Housing assistance. Medicaid. Behavioral health records.<br><br>
-    Now ask the real question, <i>whose historical data did Al learn from?</i> Vera's files.<br><br>
-    And Vera's files exist because certain families had more contact with systems that generate records. Those systems have had the most contact with families who are poor, Black, Indigenous, and reliant on government services to survive. Not because those families have more risk but because they've been seen more.`,
+    narration: `Think about what went into Denise's score. Prior CPS contact. Housing assistance. Medicaid. Mental health records. All of it came from Vera's files.<br><br>
+    When Al learns that prior CPS contact predicts removal, he's right, statistically. <br><br>
+    Remember that finish this sentence game? Al finished it the only way he knew how, based on what he'd seen before.<br><br>
+    Prior CPS contact leads to... removal. Not because that's true. Because that's the pattern in Vera's files.`,
     character: {
       emoji: "📚",
       name: "Vera the Data",
@@ -184,10 +206,10 @@ const ZONES = [
       accent: "#a855f7",
       image: "assets/vera.png",
       stats: [
-      { label: "FILES", val: "100,000+" },
-      { label: "BLIND SPOT", val: "The Unseen" },
-    ],
-      bio: "Vera is a meticulous librarian. She has files on hundreds of thousands of families. She is thorough and organized — but she only has records from families who touched a government system. She has no files on families who never called a hotline, never applied for housing assistance, never interacted with the criminal legal system, behavioral health system, or public benefits systems. She isn't lying. She's just incomplete. And she doesn't know what she doesn't know.",
+        { label: "FILES",      val: "100,000+" },
+        { label: "BLIND SPOT", val: "The Unseen" },
+      ],
+      bio: "Vera is a meticulous librarian. She is thorough, organized and has files on hundreds of thousands of families. However, she only has records from families who touched a government system. She isn't lying. She's just incomplete.",
       phrase: "\"I only have files on families the system already knew.\"",
     },
     charOrder: "reveal-file",
@@ -196,65 +218,47 @@ const ZONES = [
     vote: null,
     rules: null,
   },
-  {// ZONE FOUR
+  { // ZONE 4 — The Reality
     id: 4,
-    name: "District 4 — The Gap",
+    name: "District 4 — The Reality",
     time: "8 min",
     narration: `So, if the data is biased, and the pattern Al learned is a pattern of surveillance, does that mean the tool makes things worse? That's the honest question.<br><br>
     Allegheny County's 2024 research found after implementing the tool, racial disparities in screening rates decreased.<br><br>
     But here's the question that data can't answer: <i>what is the tool actually predicting?</i> And its not whether a child will be harmed. It's whether a child will be removed and those are not the same thing. A child can be removed without ever being in danger and a child can be in danger without ever being removed.<br><br>
     So, the goal isn't to get rid of the tool. It's to be honest about what it measures, and what it doesn't.`,
-    character: {
-      emoji: "👔",
-      name: "The Supervisor",
-      title: "The Protocol Layer",
-      accent: "#fb923c",
-      image: "assets/supervisor.png",
-      stats: [
-      { label: "DECISIONS", val: "80+ / Week" },
-      { label: "OVERRIDE", val: "Possible" },
-    ],
-      bio: "The Supervisor is the policy layer. And at a score of 17, there is no default policy, no automatic answer.<br><br> Maya brings the referral, the data, and the score. The Supervisor brings oversight, accountability, and the authority to make the call. Together they're supposed to ask: what do we know, what don't we know, and what does this family actually need?<br><br>A score of 17 should be starting a conversation. Not ending one. And how well that conversation goes depends entirely on whether the conditions are in place for it to even happen",
-      phrase: "Two people. One number. No easy answer.",
-    },
-    charOrder: "first",
+    character: null,
+    charOrder: null,
     prompt: null,
     mentiLink: null,
     vote: null,
     rules: null,
   },
-  {// ZONE FIVE
+  { // ZONE 5 — The Table
     id: 5,
     name: "District 5 — The Table",
     time: "15 min",
     narration: `AI is not going away. PRMs are already in more than 2 dozen states with more and more sites considering them. The question isn't whether to use the technology. The question is, <i>what conditions have to be in place before you do?</i><br><br>
-    Now, does anyone have any idea of something we may already have in place, that can answer that question?
-
-
-    CFF already has the framework to answer that. We didn't need to build a new framework for AI. We just need to apply the one we already have.
-
+    Now, does anyone have any idea of something we may already have in place, that can answer that question?<br><br>
+    CFF already has the framework to answer that. We didn't need to build a new framework for AI. We just need to apply the one we already have.<br><br>
     These are the Rules of Engagement.`,
     character: {
       emoji: "📋",
-      name: "The Playbook Coach",
-      title: "CFF's Voice",
+      name: "You",
+      title: "Your Voice",
       accent: "#4ade80",
       image: "assets/coach.png",
-      stats: [
-      { label: "FRAMEWORK", val: "CFF" },
-      { label: "APPROACH", val: "TA & Training" },
-    ],
-      bio: "The Playbook Coach doesn't have all the answers. But they have the right questions — and they know which framework to reach for. They've been working at the SUD–child welfare intersection for decades. They know what families need. They know how systems fail them. And they know what good TA looks like.",
-      phrase: "The Coach doesn't hand you a play and walk away.",
+      stats: null,
+      bio: "You've been working at this intersection for years. You already know what families need. You already know how systems fail them. You already know what good practice looks like and you already know how to have this conversation.",
+      phrase: null,
     },
     charOrder: "first",
     mentiLink: null,
     vote: null,
     rules: null,
   },
-  {// ZONE SIX
+  { // ZONE 6 — The Playbook (Rules of Engagement)
     id: 6,
-    name: "District 5 — Rules of Engagement",
+    name: "District 6 — The Playbook",
     time: "15 min",
     narration: null,
     character: null,
@@ -273,18 +277,22 @@ const ZONES = [
   },
 ];
 
-// ── Map update ──
+
+/* ============================================================
+   4. HUD & NAVIGATION
+   ============================================================ */
+
 function updateHUD(zoneIndex) {
   const zoneNames = [
     'DISTRICT 0',
     'DISTRICT 1 — THE CALL',
     'DISTRICT 2 — THE SCORE',
     'DISTRICT 3 — THE WEIGHT',
-    'DISTRICT 4 — THE GAP',
-    'DISTRICT 5 — THE TABLE',
-    'DISTRICT 6 - THE PLAYBOOK'
+    'DISTRICT 4 — THE REALITY',
+    'DISTRICT 5 — THE SHIFT',
+    'DISTRICT 6 — THE PLAYBOOK'
   ];
-  document.getElementById('zone-label').textContent = zoneNames[zoneIndex];
+  document.getElementById('zone-label').textContent = zoneNames[zoneIndex] || 'LOS DATOS';
 
   for (let i = 0; i <= 5; i++) {
     const row = document.getElementById('dr-' + i);
@@ -302,23 +310,30 @@ function updateHUD(zoneIndex) {
   if (scoreDisplay) {
     scoreDisplay.textContent = String(score).padStart(6, '0');
   }
-  const navDeck = document.getElementById('nav-deck');
-  // hide nav when on start screen (zone 0 and game not started)
 }
+
+
+/* ============================================================
+   5. GAME FLOW FUNCTIONS
+   ============================================================ */
 
 function startGame() {
   gameStarted = true;
-  const startScreen = document.getElementById('start-screen');
-  startScreen.style.display = 'none';
+  document.getElementById('start-screen').style.display = 'none';
   document.getElementById('nav-deck').style.display = 'flex';
   showMissionBriefing();
 }
 
 function jumpToDistrict(zoneIndex) {
+  if (zoneIndex === 99) {
+    openFinishScreen();
+    return;
+  }
   gameStarted = true;
   onMissionBriefing = false;
   district5Screen = 1;
   document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('nav-deck').style.display = 'flex';
   currentZone = zoneIndex;
   updateHUD(zoneIndex);
   renderZone(zoneIndex);
@@ -328,19 +343,19 @@ function jumpToDistrict(zoneIndex) {
 
 function returnToStart() {
   if (!gameStarted && !onMissionBriefing) return;
-  gameStarted = false;
+  gameStarted       = false;
   onMissionBriefing = false;
-  currentZone = 0;
-  district5Screen = 1;
+  currentZone       = 0;
+  district5Screen   = 1;
   document.getElementById('start-screen').style.display = 'flex';
   document.getElementById('main-content').innerHTML = '';
   document.getElementById('unlock-banner').classList.remove('visible');
   document.getElementById('back-btn').style.display = 'none';
-  document.getElementById('next-btn').className = 'nav-btn forward';
+  document.getElementById('next-btn').className   = 'nav-btn forward';
   document.getElementById('next-btn').textContent = 'Next Level >>';
-  document.getElementById('next-btn').onclick = advanceDistrict;
-  updateHUD(0);
+  document.getElementById('next-btn').onclick     = advanceDistrict;
   document.getElementById('nav-deck').style.display = 'none';
+  updateHUD(0);
 }
 
 function showMissionBriefing() {
@@ -362,13 +377,10 @@ function showMissionBriefing() {
       ${buildMentiLink("https://www.menti.com/PLACEHOLDER")}
     </div>`;
 
-  const backBtn = document.getElementById('back-btn');
-  const nextBtn = document.getElementById('next-btn');
-
-  backBtn.style.display = 'flex';
-  nextBtn.className   = 'nav-btn forward';
-  nextBtn.textContent = '>> DEPLOY';
-  nextBtn.onclick     = launchDistrict1;
+  document.getElementById('back-btn').style.display = 'flex';
+  document.getElementById('next-btn').className   = 'nav-btn forward';
+  document.getElementById('next-btn').textContent = '>> DEPLOY';
+  document.getElementById('next-btn').onclick     = launchDistrict1;
 }
 
 function launchDistrict1() {
@@ -381,9 +393,12 @@ function launchDistrict1() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function advanceDistrict5Screen() {
+function advanceToPlaybook() {
   district5Screen = 2;
-  document.getElementById('zone-label').textContent = 'DISTRICT 5 — RULES OF ENGAGEMENT';
+  currentZone     = 6;
+  addPoints(100);
+  updateHUD(6);
+  document.getElementById('zone-label').textContent = 'DISTRICT 6 — THE PLAYBOOK';
 
   document.getElementById('main-content').innerHTML = `
     <div class="slide-in">
@@ -392,10 +407,73 @@ function advanceDistrict5Screen() {
       ${buildPrompt(ZONES[6].prompt)}
     </div>`;
 
-  const nextBtn = document.getElementById('next-btn');
-  nextBtn.className   = 'nav-btn arrived';
-  nextBtn.textContent = 'MISSION COMPLETE >>';
-  nextBtn.onclick     = openFinishScreen;
+  document.getElementById('next-btn').className   = 'nav-btn arrived';
+  document.getElementById('next-btn').textContent = 'MISSION COMPLETE >>';
+  document.getElementById('next-btn').onclick     = openFinishScreen;
+  document.getElementById('back-btn').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function advanceDistrict() {
+  if (!gameStarted) return;
+  if (currentZone >= 5) return;
+
+  currentZone++;
+  addPoints(100);
+  updateHUD(currentZone);
+  renderZone(currentZone);
+
+  if (currentZone !== 4) {
+    setTimeout(showUnlockBanner, 400);
+  }
+
+  document.getElementById('back-btn').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  if (!gameStarted && !onMissionBriefing) return;
+
+  // From mission briefing — back to start screen
+  if (onMissionBriefing) {
+    onMissionBriefing = false;
+    gameStarted       = false;
+    document.getElementById('main-content').innerHTML = '';
+    document.getElementById('start-screen').style.display = 'flex';
+    document.getElementById('back-btn').style.display = 'none';
+    document.getElementById('next-btn').className   = 'nav-btn forward';
+    document.getElementById('next-btn').textContent = 'Next Level >>';
+    document.getElementById('next-btn').onclick     = advanceDistrict;
+    document.getElementById('nav-deck').style.display = 'none';
+    updateHUD(0);
+    return;
+  }
+
+  // From District 1 — back to mission briefing
+  if (currentZone === 1) {
+    currentZone = 0;
+    showMissionBriefing();
+    return;
+  }
+
+  // From Playbook (District 6) — back to District 5
+  if (district5Screen === 2) {
+    district5Screen = 1;
+    currentZone     = 5;
+    updateHUD(5);
+    renderZone(5);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  // Default — go back one district
+  currentZone--;
+  updateHUD(currentZone);
+  renderZone(currentZone);
+
+  document.getElementById('next-btn').className   = 'nav-btn forward';
+  document.getElementById('next-btn').textContent = 'Next Level >>';
+  document.getElementById('next-btn').onclick     = advanceDistrict;
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -408,260 +486,42 @@ function addPoints(points) {
   }
 }
 
-function advanceToPlaybook() {
-  district5Screen = 2;
-  currentZone = 6;
-  addPoints(100);
-  updateHUD(5);
-  document.getElementById('zone-label').textContent = 'DISTRICT 6 — THE PLAYBOOK';
-  document.getElementById('main-content').innerHTML = `
-    <div class="slide-in">
-      <div class="rules-header">// RULES OF ENGAGEMENT //</div>
-      ${buildRules(ZONES[6].rules)}
-      ${buildPrompt(ZONES[6].prompt)}
-    </div>`;
+function showUnlockBanner() {
+  const Z = ZONES[currentZone];
+  if (!Z || !Z.character) return;
 
-  const nextBtn = document.getElementById('next-btn');
-  nextBtn.className   = 'nav-btn arrived';
-  nextBtn.textContent = 'MISSION COMPLETE >>';
-  nextBtn.onclick     = openFinishScreen;
+  const banner = document.getElementById('unlock-banner');
+  banner.textContent = '★ NEW CHARACTER UNLOCKED — ' + Z.character.name.toUpperCase() + ' ★';
+  banner.classList.add('visible');
 
-  document.getElementById('back-btn').style.display = 'flex';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => {
+    banner.classList.remove('visible');
+  }, 3000);
 }
 
-// ── Build character card HTML ──
-function buildCharCard(char) {
-  if (!char) {
-    return `
-      <div class="char-frame">
-        <div class="char-empty">
-          <span class="char-empty-icon">🎮</span>
-          Characters unlock as you enter each district
-        </div>
-      </div>`;
-  }
-return `
-    <div class="char-frame slide-in" onclick="openCharModal(${currentZone})" role="button" tabindex="0" aria-label="View ${char.name} character card">
-      <div class="char-seal">
-        ${char.image ? `<img src="${char.image}" alt="${char.name}" class="char-img">` : char.emoji}
-      </div>
-      <div class="char-name">${char.name}</div>
-      <div class="char-title">${char.title}</div>
-      <div class="char-bio">${char.bio}</div>
-      ${char.phrase ? `<div class="char-phrase">${char.phrase}</div>` : ''}
-    </div>`;
-}
 
-// ── Build vote section HTML ──
-function buildVote(vote) {
-  if (!vote) return '';
-  return `
-    <div class="vote-section">
-      <div class="vote-header">⚔ Crew Vote</div>
-      <div class="vote-question">${vote.question}</div>
-      <div class="vote-row">
-        <button class="vote-btn screen-in" onclick="castVote()">${vote.optionA}</button>
-        <button class="vote-btn screen-out" onclick="castVote()">${vote.optionB}</button>
-      </div>
-      <div class="vote-reveal" id="vote-reveal">${vote.reveal}</div>
-    </div>`;
-}
+/* ============================================================
+   6. ZONE RENDERING
+   ============================================================ */
 
-// ── Build rules grid HTML ──
-function buildRules(rules) {
-  if (!rules) return '';
-  const tiles = rules.map((r, i) => `
-    <div class="rule-tile" onclick="openRuleModal(${i})" role="button" tabindex="0"
-         aria-label="Open details for ${r.name}"
-         onkeydown="if(event.key==='Enter'||event.key===' ')openRuleModal(${i})">
-      <div class="rule-number">${r.num}</div>
-      <div class="rule-name">${r.name}</div>
-      <div class="rule-anchor">${r.anchor}</div>
-      <div class="rule-callback">${r.callback}</div>
-      <div class="rule-expand-hint">Tap to expand ↗</div>
-    </div>`).join('');
-  return `<div class="rules-grid">${tiles}</div>`;
-}
-
-// ── Build Mentimeter link block ──
-function buildMentiLink(link) {
-  if (!link) return '';
-  return `
-    <div class="menti-block">
-      <div class="menti-label">//🎮 WORD CLOUD - BEFORE WE BEGIN //</div>
-      <div class="menti-prompt">When I say "AI" — what comes to mind? Add your answer:</div>
-      <a class="menti-link" href="${link}" target="_blank" rel="noopener noreferrer">
-        Open Mentimeter →
-      </a>
-      <div class="menti-sub">Opens in a new tab · One or two words · No right answer</div>
-    </div>`;
-}
-
-// ── Build discussion prompt HTML ──
-function buildPrompt(prompt) {
-  if (!prompt) return '';
-  return `
-    <div class="prompt-banner">
-      <div class="prompt-anchor-icon">▶</div>
-      <div>
-        <div class="prompt-label">// DISCUSSION //</div>
-        <div class="prompt-text">${prompt}</div>
-      </div>
-    </div>`;
-}
-
-// ── Anchor text lookup ──
-function getAnchorText(index) {
-  const anchors = [
-    "CFF's Comprehensive Framework has always held that effective cross-system collaboration starts with shared mission, vision, and goals — before services are designed, before contracts are signed, before tools are selected. That principle doesn't change because the tool is algorithmic. A predictive risk model encodes assumptions about what a child welfare system is trying to accomplish. If your agency hasn't explicitly named those goals and gotten buy-in across stakeholders, you have no foundation to evaluate whether a tool serves them or undermines them.",
-    "CFF's Comprehensive Framework emphasizes efficient cross-systems communication as a foundation for effective service delivery — and that means understanding not just what data systems share, but what they don't. CFF has spent decades helping sites understand how information flows — and doesn't flow — across systems. That expertise is exactly what's needed when a site is evaluating whether a PRM's data sources reflect the full picture of the families they serve.",
-    "CFF's Comprehensive Framework places ongoing cross-training and staff development at the center of systems change work — not as a one-time event but as a continuous organizational practice. Predictive risk tools aren't static. They're recalibrated over time, their outputs shift as agency data changes, and the policy protocols around them evolve. The framework's emphasis on ongoing development is precisely the standard sites need to hold vendors and administrators accountable to.",
-    "Family-centered treatment and recovery support is not a program model in CFF's framework — it's a values orientation that runs through every element of the work. It holds that families are the experts on their own lives, that services should be built around their strengths and needs, and that the relationship between a family and the people serving them is itself a mechanism of change. A predictive risk tool has no relationship with a family. It has a score. CFF's framework is unambiguous about which one drives outcomes.",
-    "CFF's Comprehensive Framework places measuring and monitoring outcomes at the center of sustained systems change — not as an evaluation add-on but as an ongoing organizational practice. Monitoring a predictive risk tool means more than tracking overall accuracy rates. It means disaggregating performance data by race, ethnicity, and socioeconomic status to detect subpopulation disparities that aggregate metrics can hide, and building feedback loops between frontline workers and the people who maintain the model.",
-    "Sustainability and institutionalization in CFF's Comprehensive Framework isn't about keeping programs alive for their own sake — it's about ensuring that the structures, practices, and values that produce good outcomes for families become embedded in how a system operates, regardless of who is leading it or what the funding climate looks like. A tool that operates without institutionalized governance, recalibration processes, and accountability mechanisms will degrade — quietly, consistently, and consequentially."
-  ];
-  return anchors[index] || '';
-}
-
-// ── Open rule modal ──
-function openRuleModal(index) {
-  const r = RULE_DETAIL[index];
-  const questionItems = r.questions.map(q => `<li>${q}</li>`).join('');
-  const modal = document.getElementById('rule-modal');
-  const modalContent = document.getElementById('modal-content');
-
-  modalContent.innerHTML = `
-    <div class="modal-header">
-      <div class="modal-rule-num">${r.num} — ${r.anchor}</div>
-      <div class="modal-rule-name">${r.name}</div>
-    </div>
-    <div class="modal-section modal-plain">
-      <p>${r.plain}</p>
-    </div>
-    <div class="modal-section modal-questions">
-      <div class="modal-section-label">Questions a site should be asking</div>
-      <ul>${questionItems}</ul>
-    </div>`;
-
-  modal.classList.add('visible');
-  document.body.classList.add('modal-open');
-  document.getElementById('modal-close').focus();
-}
-
-// ── Close rule modal ──
-function closeRuleModal() {
-  const modal = document.getElementById('rule-modal');
-  modal.classList.remove('visible');
-  document.body.classList.remove('modal-open');
-}
-
-function openCharModal(zoneIndex) {
-  const char = ZONES[zoneIndex].character;
-  if (!char) return;
-
-  const modal = document.getElementById('char-modal');
-  const box   = document.getElementById('char-modal-box');
-
-  box.style.setProperty('--char-accent', char.accent);
-
-  const stats = char.stats.map(s => `
-    <div class="char-stat">
-      <div class="char-stat-label">${s.label}</div>
-      <div class="char-stat-val">${s.val}</div>
-    </div>`).join('');
-
-  document.getElementById('char-modal-content').innerHTML = `
-    <div class="char-modal-header">
-      <div class="char-modal-emoji">${char.image ? `<img src="${char.image}" alt="${char.name}" class="char-modal-img">` : char.emoji}</div>
-      <div>
-        <div class="char-modal-name">${char.name.toUpperCase()}</div>
-        <div class="char-modal-title">${char.title}</div>
-      </div>
-    </div>
-    <div class="char-modal-body">
-      <div class="char-modal-stats">${stats}</div>
-      <div class="char-modal-bio">${char.bio}</div>
-      ${char.phrase ? `<div class="char-modal-phrase">${char.phrase}</div>` : ''}
-    </div>`;
-
-  modal.classList.add('visible');
-  document.body.classList.add('modal-open');
-  document.getElementById('char-modal-close').focus();
-}
-
-function closeCharModal() {
-  document.getElementById('char-modal').classList.remove('visible');
-  document.body.classList.remove('modal-open');
-}
-
-function openFinishScreen() {
-  const row = document.getElementById('dr-complete');
-  if (row) {
-    row.classList.add('unlocked');
-    row.querySelector('.district-lock').textContent = 'UNLOCKED';
-  }
-
-  const finishVal = document.getElementById('finish-score-val');
-  finishVal.textContent = String(score).padStart(6, '0');
-  document.getElementById('finish-overlay').classList.add('visible');
-  document.body.classList.add('modal-open');
-}
-
-function closeFinishScreen() {
-  document.getElementById('finish-overlay').classList.remove('visible');
-  document.body.classList.remove('modal-open');
-  gameStarted = false;
-  currentZone = 0;
-  score = 0;
-  district5Screen = 1;
-  onMissionBriefing = false
-  // Reset all district rows to locked
-  const allRows = document.querySelectorAll('.district-row');
-  allRows.forEach(row => {
-    row.classList.remove('unlocked', 'active');
-    const lock = row.querySelector('.district-lock');
-    if (lock) lock.textContent = 'LOCKED';
-    document.getElementById('nav-deck').style.display = 'none';
-  });
-
-  // Keep Mission Briefing always available
-  const briefingRow = document.getElementById('dr-briefing');
-  if (briefingRow) {
-    briefingRow.classList.add('unlocked');
-    const lock = briefingRow.querySelector('.district-lock');
-    if (lock) lock.textContent = 'AVAILABLE';
-  }
-  document.getElementById('start-screen').style.display = 'flex';
-  document.getElementById('main-content').innerHTML = '';
-  document.getElementById('unlock-banner').classList.remove('visible');
-  document.getElementById('back-btn').style.display = 'none';
-  document.getElementById('next-btn').className = 'nav-btn forward';
-  document.getElementById('next-btn').textContent = 'Next Level >>';
-  document.getElementById('next-btn').onclick = advanceDistrict;
-  updateHUD(0);
-}
-
-// ── Render a zone ──
 function renderZone(zoneIndex) {
   const Z = ZONES[zoneIndex];
-
   document.getElementById('time-label').textContent = Z.time;
 
   const narrationText = Z.narration ? Z.narration.replace(/\n\n/g, '<br><br>') : '';
-
   let html = '';
 
+  // ── Zone 6: The Playbook ──
   if (zoneIndex === 6) {
-      html = `
-        <div class="slide-in">
-          <div class="rules-header">// RULES OF ENGAGEMENT //</div>
-          ${buildRules(ZONES[6].rules)}
-          ${buildPrompt(ZONES[6].prompt)}
-        </div>`;
-
+    html = `
+      <div class="slide-in">
+        <div class="rules-header">// RULES OF ENGAGEMENT //</div>
+        ${buildRules(ZONES[6].rules)}
+        ${buildPrompt(ZONES[6].prompt)}
+      </div>`;
     document.getElementById('main-content').innerHTML = html;
 
+  // ── Zone 4: The Gap — narration first, character reveals on click ──
   } else if (zoneIndex === 4) {
     html = `
       <div class="slide-in">
@@ -682,7 +542,6 @@ function renderZone(zoneIndex) {
         </div>
         ${Z.prompt ? buildPrompt(Z.prompt) : ''}
       </div>`;
-
     document.getElementById('main-content').innerHTML = html;
 
     const revealBtn = document.getElementById('reveal-supervisor');
@@ -693,6 +552,7 @@ function renderZone(zoneIndex) {
       });
     }
 
+  // ── Zone 2: The Score — character and vote first, case file reveals on click ──
   } else if (Z.charOrder === 'before-vote') {
     html = `
       <div class="slide-in">
@@ -713,10 +573,10 @@ function renderZone(zoneIndex) {
           ${Z.prompt ? buildPrompt(Z.prompt) : ''}
         </div>
       </div>`;
-
     document.getElementById('main-content').innerHTML = html;
 
-    } else if (Z.charOrder === 'reveal-file') {
+  // ── Zone 3: The Weight — character first, case file reveals on click ──
+  } else if (Z.charOrder === 'reveal-file') {
     html = `
       <div class="slide-in">
         <div class="content-grid">
@@ -735,11 +595,10 @@ function renderZone(zoneIndex) {
           ${Z.prompt ? buildPrompt(Z.prompt) : ''}
         </div>
       </div>`;
-
     document.getElementById('main-content').innerHTML = html;
 
+  // ── All other zones ──
   } else {
-    // All other districts
     html = `
       <div class="slide-in">
         <div class="content-grid">
@@ -747,25 +606,26 @@ function renderZone(zoneIndex) {
             <div class="scroll-label">// CASE FILE //</div>
             <div class="scroll-text">${narrationText}</div>
           </div>
-          ${Z.character ? buildCharCard(Z.character) : '<div class="char-frame"><div class="char-empty"><span class="char-empty-icon">🎮</span>Characters unlock as you enter each district</div></div>'}
+          ${Z.character
+            ? buildCharCard(Z.character)
+            : '<div class="char-frame"><div class="char-empty"><span class="char-empty-icon">🎮</span>Characters unlock as you enter each district</div></div>'}
         </div>
         ${Z.mentiLink ? buildMentiLink(Z.mentiLink) : ''}
         ${buildVote(Z.vote)}
         ${buildRules(Z.rules)}
         ${Z.prompt ? buildPrompt(Z.prompt) : ''}
       </div>`;
-
     document.getElementById('main-content').innerHTML = html;
   }
 
   voteRevealed = false;
 
-  const backBtn = document.getElementById('back-btn');
-  const nextBtn = document.getElementById('next-btn');
-  const diceDisplay = document.getElementById('dice-result');
+  const backBtn    = document.getElementById('back-btn');
+  const nextBtn    = document.getElementById('next-btn');
+  const diceResult = document.getElementById('dice-result');
 
-  diceDisplay.textContent = '';
-  backBtn.style.display = 'flex';
+  diceResult.textContent  = '';
+  backBtn.style.display   = 'flex';
 
   if (zoneIndex === 5) {
     nextBtn.className   = 'nav-btn forward';
@@ -782,7 +642,92 @@ function renderZone(zoneIndex) {
   }
 }
 
-// ── Crew vote ──
+
+/* ============================================================
+   7. BUILDER FUNCTIONS
+   ============================================================ */
+
+function buildCharCard(char) {
+  if (!char) {
+    return `
+      <div class="char-frame">
+        <div class="char-empty">
+          <span class="char-empty-icon">🎮</span>
+          Characters unlock as you enter each district
+        </div>
+      </div>`;
+  }
+  return `
+    <div class="char-frame slide-in" onclick="openCharModal(${currentZone})" role="button" tabindex="0" aria-label="View ${char.name} character card">
+      <div class="char-seal">
+        ${char.image ? `<img src="${char.image}" alt="${char.name}" class="char-img">` : char.emoji}
+      </div>
+      <div class="char-name">${char.name}</div>
+      <div class="char-title">${char.title}</div>
+      <div class="char-bio">${char.bio}</div>
+      ${char.phrase ? `<div class="char-phrase">${char.phrase}</div>` : ''}
+    </div>`;
+}
+
+function buildVote(vote) {
+  if (!vote) return '';
+  return `
+    <div class="vote-section">
+      <div class="vote-header">// DISTRICT VOTE //</div>
+      <div class="vote-question">${vote.question}</div>
+      <div class="vote-row">
+        <button class="vote-btn screen-in"  onclick="castVote()">${vote.optionA}</button>
+        <button class="vote-btn screen-out" onclick="castVote()">${vote.optionB}</button>
+      </div>
+      <div class="vote-reveal" id="vote-reveal">${vote.reveal}</div>
+    </div>`;
+}
+
+function buildRules(rules) {
+  if (!rules) return '';
+  const tiles = rules.map((r, i) => `
+    <div class="rule-tile" onclick="openRuleModal(${i})" role="button" tabindex="0"
+         aria-label="Open details for ${r.name}"
+         onkeydown="if(event.key==='Enter'||event.key===' ')openRuleModal(${i})">
+      <div class="rule-number">${r.num}</div>
+      <div class="rule-name">${r.name}</div>
+      <div class="rule-anchor">${r.anchor}</div>
+      <div class="rule-callback">${r.callback}</div>
+      <div class="rule-expand-hint">Tap to expand ↗</div>
+    </div>`).join('');
+  return `<div class="rules-grid">${tiles}</div>`;
+}
+
+function buildMentiLink(link) {
+  if (!link) return '';
+  return `
+    <div class="menti-block">
+      <div class="menti-label">// WORD CLOUD — BEFORE WE BEGIN //</div>
+      <div class="menti-prompt">When someone says "AI" — what comes to mind?</div>
+      <a class="menti-link" href="${link}" target="_blank" rel="noopener noreferrer">
+        Open Mentimeter →
+      </a>
+      <div class="menti-sub">Opens in a new tab · As many words as you need · No right answer</div>
+    </div>`;
+}
+
+function buildPrompt(prompt) {
+  if (!prompt) return '';
+  return `
+    <div class="prompt-banner">
+      <div class="prompt-anchor-icon">▶</div>
+      <div>
+        <div class="prompt-label">// DISCUSSION //</div>
+        <div class="prompt-text">${prompt}</div>
+      </div>
+    </div>`;
+}
+
+
+/* ============================================================
+   8. INTERACTION HANDLERS
+   ============================================================ */
+
 function castVote() {
   if (voteRevealed) return;
   voteRevealed = true;
@@ -792,9 +737,9 @@ function castVote() {
 }
 
 function revealCaseFile() {
-  const btn = document.getElementById('district2-btn');
+  const btn      = document.getElementById('district2-btn');
   const leftSlot = document.getElementById('district2-left');
-  const reveal = document.getElementById('district2-reveal');
+  const reveal   = document.getElementById('district2-reveal');
 
   if (btn) btn.style.display = 'none';
 
@@ -814,8 +759,8 @@ function revealCaseFile() {
 }
 
 function revealFileCard() {
-  const leftSlot = document.getElementById('reveal-file-left');
-  const reveal = document.getElementById('reveal-file-content');
+  const leftSlot      = document.getElementById('reveal-file-left');
+  const reveal        = document.getElementById('reveal-file-content');
   const narrationText = ZONES[currentZone].narration
     ? ZONES[currentZone].narration.replace(/\n\n/g, '<br><br>')
     : '';
@@ -835,86 +780,124 @@ function revealFileCard() {
   }
 }
 
-// ── Advance Level ──
-function advanceDistrict() {
-  if (!gameStarted) return;
-  if (currentZone >= 5) return;
 
-  currentZone++;
-  addPoints(100);
-  updateHUD(currentZone);
-  renderZone(currentZone);
+/* ============================================================
+   9. MODAL FUNCTIONS
+   ============================================================ */
 
-  if (currentZone !== 4) {
-    setTimeout(showUnlockBanner, 400);
-  }
+function openRuleModal(index) {
+  const r             = RULE_DETAIL[index];
+  const questionItems = r.questions.map(q => `<li>${q}</li>`).join('');
 
-  document.getElementById('back-btn').style.display = 'flex';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-header">
+      <div class="modal-rule-num">${r.num} — ${r.anchor}</div>
+      <div class="modal-rule-name">${r.name}</div>
+    </div>
+    <div class="modal-section modal-plain">
+      <p>${r.plain}</p>
+    </div>
+    <div class="modal-section modal-questions">
+      <div class="modal-section-label">Questions a site should be asking</div>
+      <ul>${questionItems}</ul>
+    </div>`;
+
+  document.getElementById('rule-modal').classList.add('visible');
+  document.body.classList.add('modal-open');
+  document.getElementById('modal-close').focus();
 }
 
-function showUnlockBanner() {
-  const Z = ZONES[currentZone];
-  if (!Z.character) return;
-
-  const banner = document.getElementById('unlock-banner');
-  banner.textContent = '★ NEW CHARACTER UNLOCKED — ' + Z.character.name.toUpperCase() + ' ★';
-  banner.classList.add('visible');
-
-  setTimeout(() => {
-    banner.classList.remove('visible');
-  }, 3000);
+function closeRuleModal() {
+  document.getElementById('rule-modal').classList.remove('visible');
+  document.body.classList.remove('modal-open');
 }
 
-// ── Go back ──
-function goBack() {
-  if (!gameStarted) return;
-  if (currentZone <= 0 && !onMissionBriefing) return;
+function openCharModal(zoneIndex) {
+  const char = ZONES[zoneIndex].character;
+  if (!char) return;
 
-  // From mission briefing — back to start screen
-  if (onMissionBriefing) {
-    onMissionBriefing = false;
-    gameStarted = false;
-    document.getElementById('main-content').innerHTML = '';
-    document.getElementById('start-screen').style.display = 'flex';
-    document.getElementById('back-btn').style.display = 'none';
-    document.getElementById('next-btn').className = 'nav-btn forward';
-    document.getElementById('next-btn').textContent = 'Next Level >>';
-    document.getElementById('next-btn').onclick = advanceDistrict;
-    updateHUD(0);
-    return;
-  }
+  const box = document.getElementById('char-modal-box');
+  box.style.setProperty('--char-accent', char.accent);
 
-// From District 1 — back to mission briefing
-  if (currentZone === 1) {
-    currentZone = 0;
-    showMissionBriefing();
-    return;
-  }
+  const stats = char.stats ? char.stats.map(s => `
+    <div class="char-stat">
+      <div class="char-stat-label">${s.label}</div>
+      <div class="char-stat-val">${s.val}</div>
+    </div>`).join('') : '';
 
-  // From District 5 Screen 2 — back to Screen 1
-  if (district5Screen === 2) {
-    district5Screen = 1;
-    updateHUD(5);
-    renderZone(5);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    return;
-  }
+  document.getElementById('char-modal-content').innerHTML = `
+    <div class="char-modal-header">
+      <div class="char-modal-emoji">
+        ${char.image ? `<img src="${char.image}" alt="${char.name}" class="char-modal-img">` : char.emoji}
+      </div>
+      <div>
+        <div class="char-modal-name">${char.name.toUpperCase()}</div>
+        <div class="char-modal-title">${char.title}</div>
+      </div>
+    </div>
+    <div class="char-modal-body">
+      <div class="char-modal-stats">${stats}</div>
+      <div class="char-modal-bio">${char.bio}</div>
+      ${char.phrase ? `<div class="char-modal-phrase">${char.phrase}</div>` : ''}
+    </div>`;
 
-  // Default — go back one district
-  currentZone--;
-  updateHUD(currentZone);
-  renderZone(currentZone);
-
-  const nextBtn = document.getElementById('next-btn');
-  nextBtn.className   = 'nav-btn forward';
-  nextBtn.textContent = 'Next Level >>';
-  nextBtn.onclick     = advanceDistrict;
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('char-modal').classList.add('visible');
+  document.body.classList.add('modal-open');
+  document.getElementById('char-modal-close').focus();
 }
 
-// ── Keyboard: close modal on Escape ──
+function closeCharModal() {
+  document.getElementById('char-modal').classList.remove('visible');
+  document.body.classList.remove('modal-open');
+}
+
+function openFinishScreen() {
+  const row = document.getElementById('dr-complete');
+  if (row) {
+    row.classList.add('unlocked');
+    row.querySelector('.district-lock').textContent = 'UNLOCKED';
+  }
+  document.getElementById('finish-score-val').textContent = String(score).padStart(6, '0');
+  document.getElementById('finish-overlay').classList.add('visible');
+  document.body.classList.add('modal-open');
+}
+
+function closeFinishScreen() {
+  document.getElementById('finish-overlay').classList.remove('visible');
+  document.body.classList.remove('modal-open');
+
+  gameStarted       = false;
+  currentZone       = 0;
+  score             = 0;
+  district5Screen   = 1;
+  onMissionBriefing = false;
+
+  // Reset all district rows to locked
+  document.querySelectorAll('.district-row').forEach(row => {
+    row.classList.remove('unlocked', 'active');
+    const lock = row.querySelector('.district-lock');
+    if (lock) lock.textContent = 'LOCKED';
+  });
+
+  // Keep Mission Briefing always available
+  const briefingRow = document.getElementById('dr-briefing');
+  if (briefingRow) {
+    briefingRow.classList.add('unlocked');
+    briefingRow.querySelector('.district-lock').textContent = 'AVAILABLE';
+  }
+
+  document.getElementById('start-screen').style.display  = 'flex';
+  document.getElementById('main-content').innerHTML       = '';
+  document.getElementById('unlock-banner').classList.remove('visible');
+  document.getElementById('back-btn').style.display       = 'none';
+  document.getElementById('next-btn').className           = 'nav-btn forward';
+  document.getElementById('next-btn').textContent         = 'Next Level >>';
+  document.getElementById('next-btn').onclick             = advanceDistrict;
+  document.getElementById('nav-deck').style.display       = 'none';
+  updateHUD(0);
+}
+
+// Keyboard: close modals on Escape
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeRuleModal();
@@ -923,6 +906,10 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ── Init ──
+
+/* ============================================================
+   10. INIT
+   ============================================================ */
+
 updateHUD(0);
 document.getElementById('nav-deck').style.display = 'none';

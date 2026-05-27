@@ -72,12 +72,12 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: 2rem 0.5rem;
 }
 
 .game {
   width: 100%;
-  max-width: 920px;
+  max-width: 1100px;
   background: var(--bg-mid);
   color: var(--card-text);
   border-radius: 14px;
@@ -129,7 +129,7 @@ body {
 
 .header-title {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 18px;
   color: var(--neon-pink);
   letter-spacing: 0.05em;
   text-align: center;
@@ -253,7 +253,7 @@ body {
   font-family: var(--font-prose);
   font-size: 18px;
   color: var(--neon-gold);
-  width: 100px;
+  width: 130px;
   flex-shrink: 0;
 }
 
@@ -424,7 +424,7 @@ body {
 
 .char-name {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 18px;
   color: var(--neon-gold);
   margin-bottom: 4px;
   letter-spacing: 0.05em;
@@ -433,7 +433,7 @@ body {
 
 .char-title {
   font-family: var(--font-body);
-  font-size: 25px;
+  font-size: 20px;
   color: var(--neon-cyan);
   margin-bottom: 0.5rem;
   letter-spacing: 0.05em;
@@ -441,7 +441,7 @@ body {
 
 .char-bio {
   font-family: var(--font-prose);
-  font-size: 18px;
+  font-size: 17px;
   color: var(--card-text);
   line-height: 1.65;
 }
@@ -706,8 +706,8 @@ body {
   top: -10px;
   left: 12px;
   background: var(--neon-purple);
-  color: var(--neon-gold);
-  font-family: var(--font-body);
+  color: var(#ffffff);
+  font-family: var(--font-prose);
   font-size: 18px;
   padding: 1px 10px;
   border-radius: 10px;
@@ -719,13 +719,14 @@ body {
   font-size: 22px;
   color: var(--neon-gold);
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.4rem;
   line-height: 1.3;
   letter-spacing: 0.03em;
 }
 
 .rule-anchor {
-  font-family: var(--font-body);
+  font-family: var(--font-prose);
   font-size: 20px;
   color: var(--neon-cyan);
   margin-bottom: 5px;
@@ -734,16 +735,16 @@ body {
 
 .rule-callback {
   font-family: var(--font-prose);
-  font-size: 14px;
+  font-size: 18px;
   color: var(--card-muted);
   font-style: italic;
   line-height: 1.5;
 }
 
 .rule-expand-hint {
-  font-family: var(--font-body);
+  font-family: var(--font-prose);
   font-size: 18px;
-  color: var(--neon-pink);
+  color: var(--neon-cyan);
   margin-top: 10px;
   letter-spacing: 0.03em;
 }
