@@ -374,7 +374,7 @@ function showMissionBriefing() {
           <li>Identify how bias enters a model through training data and why it's structural, not technical</li>
         </ul>
       </div>
-      ${buildMentiLink("https://www.menti.com/PLACEHOLDER")}
+      ${buildMentiLink("https://www.menti.com/blnb2mvpkscn")}
     </div>`;
 
   document.getElementById('back-btn').style.display = 'flex';
