@@ -141,7 +141,10 @@ const ZONES = [
     id: 1,
     name: "District 1 — The Call",
     time: "10 min",
-    narration: `A neighbor called the hotline about the Washington family. She said the kids, ages 9 and 10, knocked on her door saying they were hungry and their mother, Denise Washington, wasn’t home. The neighbor doesn’t know where Denise is, just that she leaves some evenings, and she's seen different people coming and going from the apartment. She describes Denise as a Black mother in her 30s and is pretty sure she had a prior drug problem, but she’s been clean for months.`,
+    narration: `A neighbor called the hotline about the Washington family. She said the kids, ages 9 and 10, knocked on her door saying they were hungry and their mother, Denise Washington, wasn’t home. <br><br> The neighbor doesn’t know where Denise is, just that she leaves some evenings, and she's seen different people coming and going from the apartment. She describes Denise as a Black mother in her 30s and is pretty sure she had a prior drug problem, but she’s been clean for months.<br><br>
+    <li>Denise receives housing assistance and Medicaid <br>
+    <li>There is prior CPS contact; though the allegation is unsubstantiated and <br>
+    <li>There is a flag that Denise is actively enrolled with a community support treatment program completing weekly home visits. `,
     character: {
       emoji: "👩🏽‍💼",
       name: "Maya",
@@ -165,8 +168,8 @@ const ZONES = [
     id: 2,
     name: "District 2 — The Score",
     time: "10 min",
-    narration: `The Allegheny Family Screening Tool was trained on data from 77,000 referrals. The algorithm looked at features such as prior CPS referrals, mental health records, housing assistance, etc. That then becomes a score from 1 to 20.<br><br>
-    So now the question is: where did that number come from? Whose information built it? And what did it leave out?`,
+    narration: `The Allegheny Family Screening Tool was trained on data from 77,000 referrals. It looked at factors like prior CPS referrals, mental health records, housing assistance, and learned which of those factors have historically been connected to the outcomes it was built to predict. Then it took everything it knew about Denise's household and produced a number.<br><br>
+    So the real questions are: Where did the number 17 come from? Whose information built it? And what did it leave out? And that's exactly where we're going next.`,
     character: {
       emoji: "🤖",
       name: "Al the Algorithm",
@@ -195,10 +198,9 @@ const ZONES = [
     id: 3,
     name: "District 3 — The Weight",
     time: "12 min",
-    narration: `Think about what went into Denise's score. Prior CPS contact. Housing assistance. Medicaid. Mental health records. All of it came from Vera's files.<br><br>
-    When Al learns that prior CPS contact predicts removal, he's right, statistically. <br><br>
+    narration: `When Al learns that prior CPS contact predicts removal, he's right, statistically. <br><br>
     Remember that finish this sentence game? Al finished it the only way he knew how, based on what he'd seen before.<br><br>
-    Prior CPS contact leads to... removal. Not because that's true. Because that's the pattern in Vera's files.`,
+    Prior CPS contact leads to... removal. Not because that's true. Because that's the pattern in Vera's files. <br><br> If the pattern Al learned is a pattern of who has the most records, families who have touched public systems, who have accessed government services, who have had the most contact with agencies that generate data, does that mean the tool makes things worse?`,
     character: {
       emoji: "📚",
       name: "Vera the Data",
@@ -222,10 +224,11 @@ const ZONES = [
     id: 4,
     name: "District 4 — The Reality",
     time: "8 min",
-    narration: `So, if the data is biased, and the pattern Al learned is a pattern of surveillance, does that mean the tool makes things worse? That's the honest question.<br><br>
-    Allegheny County's 2024 research found after implementing the tool, racial disparities in screening rates decreased.<br><br>
-    But here's the question that data can't answer: <i>what is the tool actually predicting?</i> And its not whether a child will be harmed. It's whether a child will be removed and those are not the same thing. A child can be removed without ever being in danger and a child can be in danger without ever being removed.<br><br>
-    So, the goal isn't to get rid of the tool. It's to be honest about what it measures, and what it doesn't.`,
+    narration: `If the pattern Al learned is a pattern of who has the most records, does the tool make things worse? The answer is, it's complicated. The evidence doesn't tell a clean story in either direction.<br><br>
+    Allegheny County's 2024 research found after implementing the tool, racial disparities in screening rates decreased. Before the tool, Black children were being screened in at higher rates. After implementation, those gaps narrowed.<br><br>
+    So, if the evidence isn't clean in either direction, if the tool isn't making things worse and it isn't making things better, then the question becomes: <i>what exactly is it measuring? Why is it even here? What is the tool actually predicting? </i><br><br>
+    ACF's brief talks about modernizing child welfare for consistency and efficiency. And they're not wrong that the system needs both.<br><br>
+    But here's what that framing misses, Maya isn't the efficiency problem. She is the human condition. She has the ability to hold both sides of that tension at once, the harm of investigating and the harm of not investigating, the score and the family behind it, the policy and the person it was written for. That is experience, which is something no algorithm can replicate, no matter how many data points it has.`,
     character: null,
     charOrder: null,
     prompt: null,
@@ -523,26 +526,15 @@ function renderZone(zoneIndex) {
 
   // ── Zone 4: The Gap — narration first, character reveals on click ──
   } else if (zoneIndex === 4) {
-    html = `
-      <div class="slide-in">
-        <div class="content-grid">
+      html = `
+        <div class="slide-in">
           <div class="scroll-card">
             <div class="scroll-label">// CASE FILE //</div>
             <div class="scroll-text">${narrationText}</div>
           </div>
-          <div class="char-frame">
-            <div class="char-empty">
-              <span class="char-empty-icon">🎮</span>
-              Character unlocks after briefing
-              <button class="reveal-btn" id="reveal-supervisor">
-                >> REVEAL CHARACTER
-              </button>
-            </div>
-          </div>
-        </div>
-        ${Z.prompt ? buildPrompt(Z.prompt) : ''}
-      </div>`;
-    document.getElementById('main-content').innerHTML = html;
+          ${Z.prompt ? buildPrompt(Z.prompt) : ''}
+        </div>`;
+      document.getElementById('main-content').innerHTML = html;
 
     const revealBtn = document.getElementById('reveal-supervisor');
     if (revealBtn) {
