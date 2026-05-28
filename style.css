@@ -477,6 +477,18 @@ body {
   color: var(--bg-deep);
 }
 
+.score-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-number {
+  font-family: var(--font-pixel);
+  font-size: 96px;
+  color: var(--neon-gold);
+  line-height: 1;
+}
 
 /* ============================================================
    8. MENTIMETER BLOCK

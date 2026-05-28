@@ -36,9 +36,9 @@ let district5Screen   = 1;
 const RULE_DETAIL = [
   {
     num: "Rule I",
-    name: "Get everyone in the huddle",
-    anchor: "Shared Mission, Vision & Goals",
-    plain: "Before a tool is selected, the people most affected need to be in the room. That means frontline staff, supervisors, families with lived experience, community advocates, and tribal partners. A tool adopted without stakeholder input will face resistance no amount of training can fix after the fact.",
+    name: "Shared Mission, Vision & Goals",
+    anchor: "Get everyone in the huddle",
+    plain: "Before a tool is selected, the people most affected need to be in the room. That means frontline staff, supervisors, families with lived experience, community advocates, and tribal partners. A tool adopted without partner input will face resistance no amount of training can fix after the fact.",
     questions: [
       "Who was in the room when this tool was selected, who wasn't?",
       "Were families with lived experience consulted?",
@@ -49,9 +49,9 @@ const RULE_DETAIL = [
   },
   {
     num: "Rule II",
-    name: "Know whose data you're using",
-    anchor: "Efficient Cross-Systems Communication",
-    plain: "Every predictive risk model is only as good as the data it was trained on. A model built from child welfare, criminal, legal, and public benefits records will reflect the history of those systems — including their documented patterns of racial and economic disparity. That's not a flaw that better technology can fix. It's a structural feature of building prediction engines on systems data.",
+    name: "Efficient Cross-Systems Communication",
+    anchor: "Know whose data you're using",
+    plain: "Every predictive risk model is only as good as the data it was trained on. A model built from child welfare, criminal, legal, and public benefits records will reflect the history of those systems. That's not a flaw that better technology can fix. It's a structural feature of building prediction engines on systems data.",
     questions: [
       "What data sources were used to build this tool, what's missing?",
       "Which populations are underrepresented or invisible in the training data?",
@@ -62,8 +62,8 @@ const RULE_DETAIL = [
   },
   {
     num: "Rule III",
-    name: "Train everybody, not just the tech team",
-    anchor: "Ongoing Cross-Training & Staff Development",
+    name: "Ongoing Cross-Training & Staff Development",
+    anchor: "Train everybody, not just the tech team",
     plain: "Every person who sees a score, acts on a score, or supervises someone who does needs to understand what the tool is measuring and what it isn't. If a worker doesn't know they can push back, or doesn't feel safe doing so, the override mechanism that exists on paper means nothing in practice. Training can't be a one-time event.",
     questions: [
       "Who received training before the tool went live, who didn't?",
@@ -76,20 +76,20 @@ const RULE_DETAIL = [
   },
   {
     num: "Rule IV",
-    name: "Keep the family at the center",
-    anchor: "Family-Centered Treatment & Recovery Support",
-    plain: "A predictive risk tool generates a score about a family. It does not generate a plan for a family. The moment a score starts substituting for genuine engagement with the people behind it, their strengths, their context, their history, their goals, the tool has stopped serving the family and started replacing them. Families are not data points.",
+    name: "Family-Centered Treatment & Recovery Support",
+    anchor: "Keep the family at the center",
+    plain: "Everything we've talked about today has focused on hotline screening. That’s where most implemented tools currently live. But PRMs aren't limited to that decision point. The ACF brief describes potential use across the continuum. As these tools expand, the family-centered questions become even more critical.",
     questions: [
-      "Are families informed when a predictive risk tool is being used in decisions about them?",
-      "Do families have any mechanism to understand or contest a score?",
+      "Is the score being used to make a decision based on what's actually known about this family, or is it substituting for that judgment?",
       "How does the agency ensure that SUD treatment engagement is read as a strength, not a risk factor?",
-      "Is there a mechanism for the screener to flag contextual information that the score can't capture — like an active home visiting program — before the decision is made?"
+      "Are families informed when a predictive risk tool is being used in decisions about them?",
+      "How does the tool account for protective factors, strengths, and family resilience,or does it?"
     ]
   },
   {
     num: "Rule V",
-    name: "Watch the replay",
-    anchor: "Measuring & Monitoring Outcomes",
+    name: "Measuring & Monitoring Outcomes",
+    anchor: "Watch the replay",
     plain: "Deploying a predictive risk tool is not a one-time decision. Models degrade over time. Agency practices change. Community demographics shift. A tool that was well-calibrated at launch can quietly become less accurate, less fair, or less aligned with agency goals without anyone noticing, unless someone is specifically tasked with watching.",
     questions: [
       "Who is responsible for ongoing monitoring of this tool, what authority do they have to act?",
@@ -104,9 +104,9 @@ const RULE_DETAIL = [
   },
   {
     num: "Rule VI",
-    name: "Build it to last — or don't build it at all",
-    anchor: "Sustainability & Institutionalization",
-    plain: "A predictive risk tool deployed without a sustainability plan is not a modernization strategy, it's a liability. Sustainability means building the governance structures, the staff capacity, the monitoring infrastructure, and the community trust a tool of this consequence requires over the long term. And it means being willing to ask the hardest question before deployment: if we can't commit to maintaining this responsibly, should we be deploying it at all?",
+    name: "Sustainability & Institutionalization",
+    anchor: "Build it to last — or don't build it at all",
+    plain: "Sustainability means building the governance structures, the staff capacity, the monitoring infrastructure, and the community trust a tool of this consequence requires over the long term. And it means being willing to ask the hardest question before deployment: if we can't commit to maintaining this responsibly, should we be deploying it at all?",
     questions: [
       "What is the governance structure for this tool, who is accountable when something goes wrong?",
       "What happens to the tool when leadership changes?",
@@ -238,12 +238,10 @@ const ZONES = [
   },
   { // ZONE 5 — The Table
     id: 5,
-    name: "District 5 — The Table",
+    name: "District 5 — The Shift",
     time: "15 min",
-    narration: `AI is not going away. PRMs are already in more than 2 dozen states with more and more sites considering them. The question isn't whether to use the technology. The question is, <i>what conditions have to be in place before you do?</i><br><br>
-    Now, does anyone have any idea of something we may already have in place, that can answer that question?<br><br>
-    CFF already has the framework to answer that. We didn't need to build a new framework for AI. We just need to apply the one we already have.<br><br>
-    These are the Rules of Engagement.`,
+    narration: `PRMs are already in more than 2 dozen states with more and more sites considering them.<br><br>The question isn't whether to use the technology, it's <i>what conditions have to be in place before you do?</i><br><br>
+    Now, does anyone have any idea of something we may already have that can help us answer that question?<br><br> ---<br><br> AI is not the enemy. It just needs the same thing every system does, the right conditions, the right oversight, and people who know how to ask the right questions.`,
     character: {
       emoji: "📋",
       name: "You",
