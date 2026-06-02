@@ -168,8 +168,7 @@ const ZONES = [
     id: 2,
     name: "District 2 — The Score",
     time: "10 min",
-    narration: `The Allegheny Family Screening Tool was trained on data from 77,000 referrals. It looked at factors like prior CPS referrals, mental health records, housing assistance, and learned which of those factors have historically been connected to the outcomes it was built to predict. Then it took everything it knew about Denise's household and produced a number.<br><br>
-    So the real questions are: Where did the number 17 come from? Whose information built it? And what did it leave out? And that's exactly where we're going next.`,
+    narration: `The Allegheny Family Screening Tool, from Pennsylvania, was trained on data from 77,000 referrals. <br><br>It looked at factors like prior CPS referrals, mental health records, housing assistance, and learned which of those factors have historically been connected to the outcomes it was built to predict. A model like this, took everything it knew about Denise's household and produced a number.`,
     character: {
       emoji: "🤖",
       name: "Al the Algorithm",
@@ -198,9 +197,7 @@ const ZONES = [
     id: 3,
     name: "District 3 — The Weight",
     time: "12 min",
-    narration: `When Al learns that prior CPS contact predicts removal, he's right, statistically. <br><br>
-    Remember that finish this sentence game? Al finished it the only way he knew how, based on what he'd seen before.<br><br>
-    Prior CPS contact leads to... removal. Not because that's true. Because that's the pattern in Vera's files. <br><br> If the pattern Al learned is a pattern of who has the most records, families who have touched public systems, who have accessed government services, who have had the most contact with agencies that generate data, does that mean the tool makes things worse?`,
+    narration: `Vera has all these files of families, but none on the family down the street whose parents are in private therapy. No files on the father who went to a private rehabilitation center to address his substance use. No files on the mother who called her pastor instead of a hotline when she was struggling.<br><br>Those families accessed help, but they accessed it privately. They never generated a record. They don't exist in Vera's files. And Al has never seen them.<br><br>Which means we have to ask a harder question. If the pattern Al learned is a pattern of who has the most records, does the tool make things worse?`,
     character: {
       emoji: "📚",
       name: "Vera the Data",
@@ -224,11 +221,9 @@ const ZONES = [
     id: 4,
     name: "District 4 — The Reality",
     time: "8 min",
-    narration: `If the pattern Al learned is a pattern of who has the most records, does the tool make things worse? The answer is, it's complicated. The evidence doesn't tell a clean story in either direction.<br><br>
+    narration: `The answer is, it's complicated. The evidence doesn't tell a clean story in either direction.<br><br>
     Allegheny County's 2024 research found after implementing the tool, racial disparities in screening rates decreased. Before the tool, Black children were being screened in at higher rates. After implementation, those gaps narrowed.<br><br>
-    So, if the evidence isn't clean in either direction, if the tool isn't making things worse and it isn't making things better, then the question becomes: <i>what exactly is it measuring? Why is it even here? What is the tool actually predicting? </i><br><br>
-    ACF's brief talks about modernizing child welfare for consistency and efficiency. And they're not wrong that the system needs both.<br><br>
-    But here's what that framing misses, Maya isn't the efficiency problem. She is the human condition. She has the ability to hold both sides of that tension at once, the harm of investigating and the harm of not investigating, the score and the family behind it, the policy and the person it was written for. That is experience, which is something no algorithm can replicate, no matter how many data points it has.`,
+    So, if the evidence isn't clean in either direction, if the tool isn't making things worse and it isn't making things better, then the question becomes: <i>what exactly is it measuring? Why is it even here? What is the tool actually predicting? </i><br><br>`,
     character: null,
     charOrder: null,
     prompt: null,
@@ -240,19 +235,9 @@ const ZONES = [
     id: 5,
     name: "District 5 — The Shift",
     time: "15 min",
-    narration: `PRMs are already in more than 2 dozen states with more and more sites considering them.<br><br>The question isn't whether to use the technology, it's <i>what conditions have to be in place before you do?</i><br><br>
-    Now, does anyone have any idea of something we may already have that can help us answer that question?<br><br> ---<br><br> AI is not the enemy. It just needs the same thing every system does, the right conditions, the right oversight, and people who know how to ask the right questions.`,
-    character: {
-      emoji: "📋",
-      name: "You",
-      title: "Your Voice",
-      accent: "#4ade80",
-      image: "assets/coach.png",
-      stats: null,
-      bio: "You've been working at this intersection for years. You already know what families need. You already know how systems fail them. You already know what good practice looks like and you already know how to have this conversation.",
-      phrase: null,
-    },
-    charOrder: "first",
+    narration: `PRMs are already in use in roughly 2 dozen states with more and more sites considering them. The question isn't whether to use the technology, it's <i>what conditions have to be in place before you do?</i> Now, does anyone have any idea of something we may already have that can help us answer that question?`,
+    character: null,
+    charOrder: null,
     mentiLink: null,
     vote: null,
     rules: null,
@@ -371,7 +356,7 @@ function showMissionBriefing() {
         <div class="briefing-header">// MISSION BRIEFING //</div>
         <ul class="briefing-objectives">
           <li>Distinguish between generative AI and predictive risk modeling</li>
-          <li>Describe how PRMs work in child welfare — data, scoring, and where human judgment applies</li>
+          <li>Describe how predictive risk models work in child welfare, including what they measure, what they can't see, and where human judgment still matters</li>
           <li>Identify how bias enters a model through training data and why it's structural, not technical</li>
         </ul>
       </div>
@@ -522,25 +507,40 @@ function renderZone(zoneIndex) {
       </div>`;
     document.getElementById('main-content').innerHTML = html;
 
-  // ── Zone 4: The Gap — narration first, character reveals on click ──
+  // ── Zone 5: The Shift ──
+  } else if (zoneIndex === 5) {
+    html = `
+      <div class="slide-in">
+        <div class="scroll-card" style="margin-bottom: 1rem;">
+          <div class="scroll-label">// CASE FILE //</div>
+          <div class="scroll-text">${narrationText}</div>
+        </div>
+        <div class="map-block">
+          <div class="scroll-label">// STATE OF THE FIELD //</div>
+          <div id="tracker-map-container"></div>
+        </div>
+        ${Z.prompt ? buildPrompt(Z.prompt) : ''}
+      </div>`;
+    document.getElementById('main-content').innerHTML = html;
+    injectTrackerMap();
+
+  // ── Zone 4: The Reality ──
   } else if (zoneIndex === 4) {
-      html = `
-        <div class="slide-in">
+    html = `
+      <div class="slide-in">
+        <div class="content-grid">
           <div class="scroll-card">
             <div class="scroll-label">// CASE FILE //</div>
             <div class="scroll-text">${narrationText}</div>
           </div>
-          ${Z.prompt ? buildPrompt(Z.prompt) : ''}
-        </div>`;
-      document.getElementById('main-content').innerHTML = html;
-
-    const revealBtn = document.getElementById('reveal-supervisor');
-    if (revealBtn) {
-      revealBtn.addEventListener('click', () => {
-        showUnlockBanner();
-        revealBtn.closest('.char-frame').outerHTML = buildCharCard(ZONES[4].character);
-      });
-    }
+          <div class="char-frame" style="display:flex; align-items:center; justify-content:center; padding: 1rem;">
+            <div id="disparity-chart-container" style="width:100%; height:100%;"></div>
+          </div>
+        </div>
+        ${Z.prompt ? buildPrompt(Z.prompt) : ''}
+      </div>`;
+    document.getElementById('main-content').innerHTML = html;
+    injectDisparityChart();
 
   // ── Zone 2: The Score — character and vote first, case file reveals on click ──
   } else if (Z.charOrder === 'before-vote') {
@@ -632,7 +632,6 @@ function renderZone(zoneIndex) {
   }
 }
 
-
 /* ============================================================
    7. BUILDER FUNCTIONS
    ============================================================ */
@@ -693,7 +692,7 @@ function buildMentiLink(link) {
   return `
     <div class="menti-block">
       <div class="menti-label">// WORD CLOUD — BEFORE WE BEGIN //</div>
-      <div class="menti-prompt">When someone says "AI" — what comes to mind?</div>
+      <div class="menti-prompt">Have you used an AI tool in the last month? If yes, what did you use it for? <br> If no, what have you seen people use AI tools for here at CFF?</div>
       <a class="menti-link" href="${link}" target="_blank" rel="noopener noreferrer">
         Open Mentimeter →
       </a>
@@ -713,7 +712,162 @@ function buildPrompt(prompt) {
     </div>`;
 }
 
+function injectDisparityChart() {
+  const container = document.getElementById('disparity-chart-container');
+  if (!container) return;
 
+  container.innerHTML = `
+    <p style="font-size: 20px; color: var(--neon-cyan); margin: 0 0 4px; font-family: var(--font-prose);">Allegheny County, PA — Racial Disparities in Screening Rates</p>
+    <p style="font-size: 15px; color: #888; margin: 0 0 12px; font-family: var(--font-prose);">Source: Rittenhouse, Putnam-Hornstein & Vaithianathan, 2024</p>
+    <div style="display:flex; gap:12px; margin-bottom:10px; font-size:15px; color:#ccc; font-family: var(--font-prose);">
+      <span style="display:flex; align-items:center; gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:#4cc9f0;display:inline-block;"></span>Black children</span>
+      <span style="display:flex; align-items:center; gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:#a855f7;display:inline-block;"></span>White children</span>
+    </div>
+    <div style="position:relative; width:100%; height:500px;">
+      <canvas id="disparityChart"></canvas>
+    </div>
+    <p style="font-size:14px; color:#666; margin:8px 0 0; font-style:italic; font-family: var(--font-prose);">Values are illustrative representations of the directional finding.</p>`;
+
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js';
+  script.onload = () => {
+    new Chart(document.getElementById('disparityChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Before AFST', 'After AFST'],
+        datasets: [
+          { label: 'Black children', data: [72, 58], backgroundColor: '#4cc9f0', borderRadius: 3 },
+          { label: 'White children', data: [55, 53], backgroundColor: '#a855f7', borderRadius: 3 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y}%` } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#ccc', font: { size: 12 } } },
+          y: { min: 0, max: 100, ticks: { callback: (v) => v + '%', color: '#ccc', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.08)' } }
+        }
+      }
+    });
+  };
+  document.head.appendChild(script);
+}
+
+function injectTrackerMap() {
+  const container = document.getElementById('tracker-map-container');
+  if (!container) return;
+
+  const STATE_DATA = {
+    'Alabama':{'status':'none','acf':true},'Alaska':{'status':'none','acf':false},
+    'Arizona':{'status':'active','acf':false},'Arkansas':{'status':'active','acf':true},
+    'California':{'status':'active','acf':false},'Colorado':{'status':'active','acf':false},
+    'Connecticut':{'status':'discontinued','acf':false},'Delaware':{'status':'active','acf':true},
+    'Florida':{'status':'active','acf':false},'Georgia':{'status':'active','acf':false},
+    'Hawaii':{'status':'active','acf':false},'Idaho':{'status':'active','acf':false},
+    'Illinois':{'status':'active','acf':false},'Indiana':{'status':'active','acf':false},
+    'Iowa':{'status':'active','acf':true},'Kansas':{'status':'active','acf':true},
+    'Kentucky':{'status':'active','acf':true},'Louisiana':{'status':'active','acf':true},
+    'Maine':{'status':'discontinued','acf':false},'Maryland':{'status':'active','acf':true},
+    'Massachusetts':{'status':'none','acf':false},'Michigan':{'status':'active','acf':false},
+    'Minnesota':{'status':'active','acf':false},'Mississippi':{'status':'none','acf':true},
+    'Missouri':{'status':'active','acf':true},'Montana':{'status':'none','acf':false},
+    'Nebraska':{'status':'active','acf':true},'Nevada':{'status':'active','acf':false},
+    'New Hampshire':{'status':'active','acf':false},'New Jersey':{'status':'active','acf':false},
+    'New Mexico':{'status':'none','acf':false},'New York':{'status':'active','acf':false},
+    'North Carolina':{'status':'active','acf':false},'North Dakota':{'status':'none','acf':false},
+    'Ohio':{'status':'active','acf':true},'Oklahoma':{'status':'active','acf':true},
+    'Oregon':{'status':'active','acf':false},'Pennsylvania':{'status':'active','acf':false},
+    'Rhode Island':{'status':'none','acf':true},'South Carolina':{'status':'active','acf':true},
+    'South Dakota':{'status':'none','acf':false},'Tennessee':{'status':'active','acf':true},
+    'Texas':{'status':'active','acf':true},'Utah':{'status':'active','acf':true},
+    'Vermont':{'status':'none','acf':false},'Virginia':{'status':'active','acf':false},
+    'Washington':{'status':'active','acf':false},'West Virginia':{'status':'active','acf':true},
+    'Wisconsin':{'status':'active','acf':false},'Wyoming':{'status':'active','acf':false}
+  };
+
+  container.innerHTML = `
+    <div style="font-size:10px; color:#888; font-family:var(--font-mono); margin-bottom:8px;">
+      saaiello.github.io/childwelfareaitracker · last updated May 2026
+    </div>
+    <div id="tracker-svg-wrap" style="width:100%;"></div>
+    <div style="display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:10px; font-size:11px; font-family:var(--font-mono);">
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;background:#4cc9f0;display:inline-block;border-radius:2px;"></span><span style="color:#ccc;">Active AI tools</span></span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;background:#a855f7;display:inline-block;border-radius:2px;"></span><span style="color:#ccc;">Discontinued</span></span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;background:#555;display:inline-block;border-radius:2px;"></span><span style="color:#ccc;">No tools identified</span></span>
+      <span style="display:flex;align-items:center;gap:5px;">
+        <span style="width:10px;height:10px;display:inline-block;border-radius:2px;background:repeating-linear-gradient(45deg,rgba(255,255,255,0.7) 0px,rgba(255,255,255,0.7) 2px,transparent 2px,transparent 5px);border:1px solid #aaa;"></span>
+        <span style="color:#ccc;">A Home for Every Child signatory</span>
+      </span>
+    </div>`;
+
+  const COLOR  = { active:'#4cc9f0', discontinued:'#a855f7', none:'#555560' };
+  const STROKE = { active:'#2a7a8a', discontinued:'#6a3a8a', none:'#3a3a4a' };
+
+  const d3Script = document.createElement('script');
+  d3Script.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
+  d3Script.onload = () => {
+    const topoScript = document.createElement('script');
+    topoScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js';
+    topoScript.onload = () => {
+      const wrap = document.getElementById('tracker-svg-wrap');
+      if (!wrap) return;
+      const w = wrap.offsetWidth || 700;
+      const h = Math.round(w * 0.6);
+
+      const svg = d3.select('#tracker-svg-wrap').append('svg')
+        .attr('viewBox', `0 0 ${w} ${h}`)
+        .attr('width', '100%')
+        .style('display', 'block');
+
+      const defs = svg.append('defs');
+      defs.append('pattern')
+        .attr('id','sig-stripe-z5')
+        .attr('patternUnits','userSpaceOnUse')
+        .attr('width',7).attr('height',7)
+        .attr('patternTransform','rotate(45)')
+        .call(p => {
+          p.append('rect').attr('width',7).attr('height',7).attr('fill','none');
+          p.append('line').attr('x1',0).attr('y1',0).attr('x2',0).attr('y2',7)
+            .attr('stroke','rgba(255,255,255,0.75)').attr('stroke-width',2);
+        });
+
+      const proj = d3.geoAlbersUsa().scale(w * 1.18).translate([w/2, h/2]);
+      const path = d3.geoPath(proj);
+
+      d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(us => {
+        const features = topojson.feature(us, us.objects.states).features;
+
+        svg.selectAll('.state-base')
+          .data(features).join('path')
+          .attr('d', path)
+          .attr('fill', d => {
+            const info = STATE_DATA[d.properties.name];
+            if (!info) return COLOR.none;
+            return COLOR[info.status] || COLOR.none;
+          })
+          .attr('stroke', d => {
+            const info = STATE_DATA[d.properties.name];
+            if (!info) return STROKE.none;
+            return STROKE[info.status] || STROKE.none;
+          })
+          .attr('stroke-width', 0.7);
+
+        svg.selectAll('.state-stripe')
+          .data(features).join('path')
+          .attr('d', path)
+          .attr('fill', d => {
+            const info = STATE_DATA[d.properties.name];
+            return (info && info.acf) ? 'url(#sig-stripe-z5)' : 'none';
+          })
+          .attr('stroke','none')
+          .attr('pointer-events','none');
+      });
+    };
+    document.head.appendChild(topoScript);
+  };
+  document.head.appendChild(d3Script);
+}
 /* ============================================================
    8. INTERACTION HANDLERS
    ============================================================ */
@@ -788,7 +942,7 @@ function openRuleModal(index) {
       <p>${r.plain}</p>
     </div>
     <div class="modal-section modal-questions">
-      <div class="modal-section-label">Questions a site should be asking</div>
+      <div class="modal-section-label">Questions</div>
       <ul>${questionItems}</ul>
     </div>`;
 

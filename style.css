@@ -1383,3 +1383,15 @@ body.modal-open {
   outline: 2px solid var(--cff-bright);
   outline-offset: 2px;
 }
+
+/* ============================================================
+   19. MAP BLOCK
+   ============================================================ */
+
+.map-block {
+  background: #0d0d2b;
+  border: 1.5px solid #ff2d78;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
