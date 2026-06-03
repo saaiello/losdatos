@@ -814,7 +814,10 @@ function injectTrackerMap() {
       <span style="display:flex;align-items:center;gap:5px;">
         <span style="width:10px;height:10px;display:inline-block;border-radius:2px;background:repeating-linear-gradient(45deg,rgba(255,255,255,0.7) 0px,rgba(255,255,255,0.7) 2px,transparent 2px,transparent 5px);border:1px solid #aaa;"></span>
         <span style="color:#ccc;">A Home for Every Child signatory</span>
-      </span>
+        </span>
+      </div>
+    <div style="margin-top:12px;">
+      <a href="https://saaiello.github.io/childwelfareaitracker/" target="_blank" style="font-family:var(--font-mono); font-size:11px; color:#ff2d78; text-decoration:none; border:1px solid #ff2d78; padding:6px 12px; border-radius:4px;">>> OPEN FULL TRACKER</a>
     </div>`;
 
   const COLOR  = { active:'#4cc9f0', discontinued:'#a855f7', none:'#555560' };
