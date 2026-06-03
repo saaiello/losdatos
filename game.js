@@ -734,7 +734,9 @@ function injectDisparityChart() {
 
   container.innerHTML = `
     <p style="font-size: 20px; color: var(--neon-cyan); margin: 0 0 4px; font-family: var(--font-prose);">Allegheny County, PA — Racial Disparities in Screening Rates</p>
-    <p style="font-size: 15px; color: #888; margin: 0 0 12px; font-family: var(--font-prose);">Source: Rittenhouse, Putnam-Hornstein & Vaithianathan, 2024</p>
+    <p style="font-size:13px; font-family:var(--font-mono); margin:0 0 12px;">
+      Source: <a href="https://krittenh.github.io/katherine-rittenhouse.com/AFST_Disparities.pdf" target="_blank" style="color:#4cc9f0;">Rittenhouse, Putnam-Hornstein & Vaithianathan</a>
+    </p>
     <div style="display:flex; gap:12px; margin-bottom:10px; font-size:15px; color:#ccc; font-family: var(--font-prose);">
       <span style="display:flex; align-items:center; gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:#4cc9f0;display:inline-block;"></span>Black children</span>
       <span style="display:flex; align-items:center; gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:#a855f7;display:inline-block;"></span>White children</span>
@@ -817,7 +819,7 @@ function injectTrackerMap() {
         </span>
       </div>
     <div style="margin-top:12px;">
-      <a href="https://saaiello.github.io/childwelfareaitracker/" target="_blank" style="font-family:var(--font-mono); font-size:11px; color:#ff2d78; text-decoration:none; border:1px solid #ff2d78; padding:6px 12px; border-radius:4px;">>> OPEN FULL TRACKER</a>
+      <a href="https://saaiello.github.io/childwelfareaitracker/" target="_blank" style="font-family:var(--font-mono); font-size:15px; color:#ff2d78; text-decoration:none; border:1px solid #ff2d78; padding:6px 12px; border-radius:4px;">>> OPEN FULL TRACKER</a>
     </div>`;
 
   const COLOR  = { active:'#4cc9f0', discontinued:'#a855f7', none:'#555560' };
