@@ -360,7 +360,7 @@ function showMissionBriefing() {
           <li>Identify how bias enters a model through training data and why it's structural, not technical</li>
         </ul>
       </div>
-      ${buildMentiLink("https://www.menti.com/blnb2mvpkscn")}
+      ${buildMentiLink("https://www.mentimeter.com/app/presentation/blioxrmxdtf86xdev8ixjqpa9gpmmho6/present?question=9e3ct5m937gi")}
     </div>`;
 
   document.getElementById('back-btn').style.display = 'flex';
@@ -708,7 +708,7 @@ function buildMentiLink(link) {
   return `
     <div class="menti-block">
       <div class="menti-label">// WORD CLOUD — BEFORE WE BEGIN //</div>
-      <div class="menti-prompt">Have you used an AI tool in the last month? If yes, what did you use it for? <br> If no, what have you seen people use AI tools for here at CFF?</div>
+      <div class="menti-prompt">Have you used an AI tool in the last month? If yes, what did you use it for? <br> If no, what have you seen people use AI for here at CFF?</div>
       <a class="menti-link" href="${link}" target="_blank" rel="noopener noreferrer">
         Open Mentimeter →
       </a>
