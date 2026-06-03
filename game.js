@@ -542,18 +542,34 @@ function renderZone(zoneIndex) {
     document.getElementById('main-content').innerHTML = html;
     injectDisparityChart();
 
-  // ── Zone 2: The Score — character and vote first, case file reveals on click ──
+// ── Zone 2: The Score — two reveal boxes left, Al right ──
   } else if (Z.charOrder === 'before-vote') {
     html = `
       <div class="slide-in">
         <div class="content-grid">
-          <div class="char-frame" id="district2-left">
-            <div class="char-empty">
-              <span class="char-empty-icon">🗂</span>
-              Case file unlocks after the vote
-              <button id="district2-btn" class="reveal-btn" onclick="revealCaseFile()">
-                >> REVEAL CASE FILE
-              </button>
+          <div style="display:flex; flex-direction:column; gap:1rem;">
+            <div class="char-frame" id="district2-casefile">
+              <div class="char-empty" id="district2-casefile-empty">
+                <span class="char-empty-icon">🗂</span>
+                Case file unlocks after the vote
+                <button id="district2-btn" class="reveal-btn" onclick="revealCaseFile()">
+                  >> REVEAL CASE FILE
+                </button>
+              </div>
+              <div id="district2-casefile-content" style="display:none;">
+                <div class="scroll-label">// CASE FILE //</div>
+                <div class="scroll-text">${narrationText}</div>
+              </div>
+            </div>
+            <div class="char-frame" id="district2-weights">
+              <div class="char-empty" id="district2-weights-empty">
+                <span class="char-empty-icon">📊</span>
+                Weight chart unlocks after the vote
+                <button id="district2-weights-btn" class="reveal-btn" onclick="revealWeightChart()">
+                  >> REVEAL THE WEIGHTS
+                </button>
+              </div>
+              <div id="district2-weights-content" style="display:none;"></div>
             </div>
           </div>
           ${buildCharCard(Z.character)}
@@ -868,6 +884,61 @@ function injectTrackerMap() {
   };
   document.head.appendChild(d3Script);
 }
+
+function injectWeightChart() {
+  const container = document.getElementById('district2-weights-content');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="scroll-label">// HOW AL WEIGHS THE EVIDENCE //</div>
+    <p style="font-size:14px; color:#888; font-family:var(--font-mono); margin:0 0 12px;">Illustrative — not Allegheny's actual weights</p>
+    <div style="position:relative; width:100%; height:240px;">
+      <canvas id="weightChart" role="img" aria-label="Horizontal bar chart showing relative factor weights in a predictive risk model. Prior CPS contact is weighted highest, followed by mental health record, housing assistance, unsubstantiated allegation, missed appointment, and zip code.">Prior CPS contact: high. Mental health record: medium-high. Housing assistance: medium. Unsubstantiated allegation: lower. Missed appointment: lower. Zip code: lowest.</canvas>
+    </div>
+    <div style="display:flex; gap:16px; margin-top:10px; font-size:12px; font-family:var(--font-mono);">
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;background:#4cc9f0;display:inline-block;border-radius:2px;"></span><span style="color:#ccc;">Higher weight</span></span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;background:#a855f7;display:inline-block;border-radius:2px;"></span><span style="color:#ccc;">Lower weight</span></span>
+    </div>`;
+
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js';
+  script.onload = () => {
+    new Chart(document.getElementById('weightChart'), {
+      type: 'bar',
+      data: {
+        labels: [
+          'Prior CPS contact',
+          'Mental health record',
+          'Housing assistance',
+          'Unsubstantiated allegation',
+          'Missed appointment',
+        ],
+        datasets: [{
+          data: [92, 74, 55, 42, 31],
+          backgroundColor: ['#4cc9f0','#4cc9f0','#4cc9f0','#a855f7','#a855f7','#a855f7'],
+          borderRadius: 3,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: (ctx) => ` Relative weight: ${ctx.parsed.x}` } }
+        },
+        scales: {
+          x: { min:0, max:100, grid:{ color:'rgba(255,255,255,0.06)' }, ticks:{ display:false } },
+          y: { grid:{ display:false }, ticks:{ color:'#ccc', font:{ size:12 }, padding:8 } }
+        }
+      }
+    });
+  };
+  document.head.appendChild(script);
+}
+
+
 /* ============================================================
    8. INTERACTION HANDLERS
    ============================================================ */
@@ -881,24 +952,22 @@ function castVote() {
 }
 
 function revealCaseFile() {
-  const btn      = document.getElementById('district2-btn');
-  const leftSlot = document.getElementById('district2-left');
-  const reveal   = document.getElementById('district2-reveal');
+  const empty = document.getElementById('district2-casefile-empty');
+  const content = document.getElementById('district2-casefile-content');
+  if (empty) empty.style.display = 'none';
+  if (content) content.style.display = 'block';
 
-  if (btn) btn.style.display = 'none';
+  const reveal = document.getElementById('district2-reveal');
+  if (reveal) reveal.style.display = 'block';
+}
 
-  if (leftSlot) {
-    leftSlot.outerHTML = `
-      <div class="scroll-card slide-in">
-        <div class="scroll-label">// CASE FILE //</div>
-        <div class="scroll-text">${ZONES[2].narration ? ZONES[2].narration.replace(/\n\n/g, '<br><br>') : ''}</div>
-      </div>`;
-  }
-
-  if (reveal) {
-    reveal.style.display = 'block';
-    reveal.classList.add('slide-in');
-    window.scrollTo({ top: document.getElementById('main-content').offsetTop, behavior: 'smooth' });
+function revealWeightChart() {
+  const empty = document.getElementById('district2-weights-empty');
+  const content = document.getElementById('district2-weights-content');
+  if (empty) empty.style.display = 'none';
+  if (content) {
+    content.style.display = 'block';
+    injectWeightChart();
   }
 }
 
