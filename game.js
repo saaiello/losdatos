@@ -38,11 +38,11 @@ const RULE_DETAIL = [
     num: "Rule I",
     name: "Shared Mission, Vision & Goals",
     anchor: "Get everyone in the huddle",
-    plain: "Before a tool is selected, the people most affected need to be in the room. That means frontline staff, supervisors, families with lived experience, community advocates, and tribal partners. A tool adopted without partner input will face resistance no amount of training can fix after the fact.",
+    plain: "Before a tool is selected, the people most affected need to be in the room. That means frontline staff, supervisors, families with lived experience, community advocates, and tribal partners. A tool adopted without partner input will face resistance no amount of training can fix.",
     questions: [
       "Who was in the room when this tool was selected, who wasn't?",
       "Were families with lived experience consulted?",
-      "Does the tool's stated purpose align with our mission and values?",
+      "Does the tool's stated purpose align with your mission and values?",
       "Who has ongoing oversight authority once the tool is live?",
       "What happens when the tool's output conflicts with stated values?"
     ]
@@ -55,7 +55,7 @@ const RULE_DETAIL = [
     questions: [
       "What data sources were used to build this tool, what's missing?",
       "Which populations are underrepresented or invisible in the training data?",
-      "Has the tool been validated against outcomes outside the child welfare system, like hospitalization data, or only against system-generated outcomes like removal?",
+      "Has the tool been validated against outcomes outside the child welfare system?",
       "Does the tool perform equally well across racial, ethnic, and socioeconomic groups?",
       "What happens when the tool encounters a family profile it hasn't seen before?"
     ]
@@ -223,7 +223,7 @@ const ZONES = [
     time: "8 min",
     narration: `The answer is, it's complicated. The evidence doesn't tell a clean story in either direction.<br><br>
     Allegheny County's 2024 research found after implementing the tool, racial disparities in screening rates decreased. Before the tool, Black children were being screened in at higher rates. After implementation, those gaps narrowed.<br><br>
-    So, if the evidence isn't clean in either direction, if the tool isn't making things worse and it isn't making things better, then the question becomes: <i>what exactly is it measuring? Why is it even here? What is the tool actually predicting? </i><br><br>`,
+    So, if the evidence isn't clean in either direction, if the tool isn't making things worse and it isn't making things better, then the question becomes: <i>what exactly is it measuring? What is the tool actually predicting? </i><br><br>`,
     character: null,
     charOrder: null,
     prompt: null,
